@@ -60,26 +60,23 @@
     .feedback-copy{max-width:66ch;margin-top:22px;font-size:16px;line-height:1.7}.feedback-copy p+p{margin-top:12px}
     .experimental{background:var(--orange);color:var(--ink)}.experimental-copy{max-width:66ch;margin-top:22px;font-size:16px;line-height:1.7}.experimental-copy p+p{margin-top:12px}
 
-    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-      .preset-section, .supported-os, .experimental, .contact-link {
-        position: relative;
-        isolation: isolate;
-        overflow: clip;
-      }
-
-      .orange-lens {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 176px;
-        height: 176px;
-        z-index: -1;
-        pointer-events: none;
-      }
+    .section.experimental{
+      display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);align-items:center;
+      gap:12px clamp(20px,4vw,48px);padding-block:clamp(16px,2.2vw,26px)
     }
-
-    @media print {
-      .orange-lens { display: none; }
+    .experimental h2{font-size:clamp(28px,3.65vw,43px);line-height:1.05;margin-bottom:7px}
+    .experimental .experimental-copy{margin:0;font-size:14px;line-height:1.4}
+    .experimental .experimental-copy p+p{margin-top:5px}
+    .experimental-files{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 10px;margin:0;font-size:13px;line-height:1.4}
+    .experimental-files dt{font-weight:650}
+    .experimental-files dd{margin:0;min-width:0}
+    .experimental-files code{font-size:12px;overflow-wrap:anywhere}
+    @media(max-width:760px){
+      .section.experimental{grid-template-columns:minmax(0,1fr)}
+    }
+    @media(max-width:500px){
+      .experimental-files{grid-template-columns:minmax(0,1fr);gap:1px}
+      .experimental-files dd+dt{margin-top:4px}
     }
   </style>
 </head>
@@ -168,11 +165,17 @@
   </section>
 
   <section class="section wrap experimental" id="experimental" aria-labelledby="experimental-title">
-    <h2 id="experimental-title">Going experimental.</h2>
     <div class="experimental-copy">
-      <p>Your download includes two versions of Project Damage. The standard build uses single-threaded processing. The experimental build uses multiple threads and can process some workloads up to twice as fast.</p>
-      <p>The multithreaded build is still experimental, so you may run into unexpected behavior in some projects. If you give it a try, I’d be grateful for any feedback, whether it’s a speed comparison or something that surprised you.</p>
+      <h2 id="experimental-title">Going experimental.</h2>
+      <p>Standard builds use one thread. The experimental Windows build uses multiple threads and can run up to 2× faster on some tasks.</p>
+      <p>You may encounter unexpected behavior. I’d love to hear your feedback.</p>
     </div>
+    <dl class="experimental-files">
+      <dt>Windows standard</dt><dd><code>Project_Damage_1.0.0_Windows_x64.zip</code></dd>
+      <dt>macOS standard</dt><dd><code>Project_Damage_1.0.0_macOS.zip</code></dd>
+      <dt>Windows experimental</dt><dd><code>Experimental_Project_Damage_1.0.1_Windows_x64.zip</code></dd>
+      <dt>Read before trying</dt><dd><code>Experimental_Project_Damage_1.0.1_README.txt</code></dd>
+    </dl>
   </section>
 
   <section class="section wrap" id="details" aria-labelledby="details-title">
@@ -241,161 +244,6 @@
   window.addEventListener('resize',reportHeight);
   document.querySelectorAll('details').forEach(function(detail){detail.addEventListener('toggle',reportHeight);});
   reportHeight();
-})();
-</script>
-<script>
-(() => {
-  const pointer = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-  if (!pointer.matches) return;
-
-  const zones = document.querySelectorAll('.preset-section, .supported-os, .experimental, .contact-link');
-  const lens = document.createElement('canvas');
-  const context = lens.getContext('2d');
-  if (!context) return;
-
-  const radius = 88;
-  const size = radius * 2;
-  const spacing = 12;
-  const scale = Math.min(window.devicePixelRatio || 1, 2);
-  lens.width = size * scale;
-  lens.height = size * scale;
-  lens.className = 'orange-lens';
-  lens.setAttribute('aria-hidden', 'true');
-  context.setTransform(lens.width / size, 0, 0, lens.height / size, 0, 0);
-
-  let activeZone = null;
-  let frame = 0;
-  let clientX = 0;
-  let clientY = 0;
-  let lastPoint = null;
-  let lastTrailPoint = null;
-  let lastTrailTime = -Infinity;
-  const trail = new Map();
-  const trailDuration = 1000;
-  const maxTrailMarks = 24;
-
-  function removeTrail(mark) {
-    const animation = trail.get(mark);
-    if (!animation) return;
-    trail.delete(mark);
-    animation.cancel();
-    mark.remove();
-  }
-
-  function leaveTrail(now) {
-    if (!activeZone || !lastPoint || now - lastTrailTime < 45 || typeof lens.animate !== 'function') return;
-    const mark = lens.cloneNode(false);
-    const markContext = mark.getContext('2d');
-    if (!markContext) return;
-
-    markContext.drawImage(lens, 0, 0);
-    activeZone.insertBefore(mark, lens);
-    const animation = mark.animate([{ opacity: .28 }, { opacity: 0 }], {
-      duration: trailDuration,
-      easing: 'ease-out',
-      fill: 'forwards',
-    });
-
-    lastTrailTime = now;
-    lastTrailPoint = lastPoint;
-    trail.set(mark, animation);
-    animation.onfinish = () => removeTrail(mark);
-    if (trail.size > maxTrailMarks) removeTrail(trail.keys().next().value);
-  }
-
-  function dot(x, y, radius, color, opacity) {
-    context.globalAlpha = opacity;
-    context.fillStyle = color;
-    context.beginPath();
-    context.arc(x, y, radius, 0, Math.PI * 2);
-    context.fill();
-  }
-
-  function draw(now) {
-    frame = 0;
-    if (!activeZone || !pointer.matches) return;
-
-    const bounds = activeZone.getBoundingClientRect();
-    const x = clientX - bounds.left - activeZone.clientLeft;
-    const y = clientY - bounds.top - activeZone.clientTop;
-    if (lastTrailPoint && Math.hypot(x - lastTrailPoint.x, y - lastTrailPoint.y) >= 18) {
-      leaveTrail(now);
-    }
-    const left = x - radius;
-    const top = y - radius;
-    lens.style.transform = 'translate(' + left + 'px, ' + top + 'px)';
-    context.clearRect(0, 0, size, size);
-
-    // The grid is anchored to the section. Only the part inside the lens is drawn.
-    const firstX = Math.ceil(left / spacing) * spacing;
-    const firstY = Math.ceil(top / spacing) * spacing;
-    for (let gridY = firstY; gridY < top + size; gridY += spacing) {
-      for (let gridX = firstX; gridX < left + size; gridX += spacing) {
-        const dx = gridX - x;
-        const dy = gridY - y;
-        const distance = Math.hypot(dx, dy);
-        if (distance >= radius) continue;
-
-        const t = distance / radius;
-        const fade = 1 - t * t * (3 - 2 * t);
-        const refraction = Math.sin(Math.PI * t) * fade;
-        const nx = distance ? dx / distance : 0;
-        const ny = distance ? dy / distance : 0;
-        const px = radius + dx + nx * 6 * refraction;
-        const py = radius + dy + ny * 6 * refraction;
-        const fringe = 2.4 * refraction;
-
-        dot(px - nx * fringe, py - ny * fringe, 1.3, '#a51c25', fade * .44);
-        dot(px + nx * fringe, py + ny * fringe, 1.3, '#167c8a', fade * .44);
-        dot(px, py, 1.1, '#56240d', fade * .48);
-      }
-    }
-    lastPoint = { x, y };
-    if (!lastTrailPoint) lastTrailPoint = lastPoint;
-  }
-
-  function move(event) {
-    if (!pointer.matches || event.pointerType !== 'mouse') return;
-    const zone = event.currentTarget;
-    if (activeZone !== zone) {
-      activeZone = zone;
-      lastPoint = null;
-      lastTrailPoint = null;
-      lastTrailTime = -Infinity;
-      zone.append(lens);
-    }
-    clientX = event.clientX;
-    clientY = event.clientY;
-    if (!frame) frame = requestAnimationFrame(draw);
-  }
-
-  function clear() {
-    if (frame) cancelAnimationFrame(frame);
-    frame = 0;
-    activeZone = null;
-    lastPoint = null;
-    context.clearRect(0, 0, size, size);
-    lens.remove();
-  }
-
-  function finish() {
-    lastTrailTime = -Infinity;
-    leaveTrail(performance.now());
-    clear();
-  }
-
-  pointer.addEventListener('change', () => {
-    if (pointer.matches) return;
-    clear();
-    for (const mark of trail.keys()) removeTrail(mark);
-  });
-
-  for (const zone of zones) {
-    zone.addEventListener('pointerenter', move, { passive: true });
-    zone.addEventListener('pointermove', move, { passive: true });
-    zone.addEventListener('pointerleave', finish, { passive: true });
-    zone.addEventListener('pointercancel', clear, { passive: true });
-  }
 })();
 </script>
 </body>
