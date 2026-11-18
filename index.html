@@ -78,6 +78,35 @@
       .experimental-files{grid-template-columns:minmax(0,1fr);gap:1px}
       .experimental-files dd+dt{margin-top:4px}
     }
+    .benchmark{border-block:1px solid var(--ink)}
+    .benchmark-toggle{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px 24px;background:var(--orange);color:var(--ink);padding-block:clamp(17px,2.5vw,28px);cursor:pointer;list-style:none}
+    .benchmark-toggle::-webkit-details-marker{display:none}
+    .benchmark-title{display:block;font:500 clamp(30px,5vw,54px)/1.1 Impact,"Arial Black",Arial,sans-serif;letter-spacing:.022em;text-transform:uppercase}
+    .benchmark-description{display:block;max-width:76ch;margin-top:6px;font-size:14px;line-height:1.45}
+    .benchmark-action{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;white-space:nowrap}
+    .benchmark-icon{display:grid;place-items:center;width:40px;height:40px;border:1px solid currentColor;font-size:26px;line-height:1}
+    .benchmark-icon::before{content:"+"}
+    .benchmark[open] .benchmark-icon::before{content:"−"}
+    .benchmark[open] .benchmark-action>span:first-child{visibility:hidden}
+    .benchmark-panel{background:#dedfda;padding-block:clamp(18px,4vw,42px)}
+    .benchmark-figure img{display:block;width:100%;height:auto}
+    .benchmark-figure figcaption{font-size:12px;line-height:1.55;color:var(--muted)}
+    .benchmark-figure figcaption{margin-top:8px}
+    .benchmark-panel h3{margin-top:clamp(18px,3vw,32px);font-size:clamp(23px,3.1vw,34px)}
+    .benchmark-hardware{margin:10px 0 16px;padding:12px;background:#ffe2d2;border:1px solid #d5b4a2;list-style:none;font-size:13px;line-height:1.5}
+    .benchmark-hardware li+li{margin-top:4px}
+    .benchmark-table-wrap{overflow-x:auto}
+    .benchmark-table-wrap table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.4;font-variant-numeric:tabular-nums}
+    .benchmark-table-wrap th,.benchmark-table-wrap td{padding:8px;border:1px solid var(--line)}
+    .benchmark-table-wrap thead th{background:#ffe2d2}
+    .benchmark-table-wrap th:first-child{text-align:left}
+    .benchmark-table-wrap td{text-align:right;white-space:nowrap}
+    @media(max-width:520px){
+      .benchmark-toggle{gap:8px 12px}
+      .benchmark-action{flex-direction:column-reverse;gap:3px;font-size:11px}
+      .benchmark-icon{width:34px;height:34px}
+      .benchmark-table-wrap table{min-width:460px}
+    }
   </style>
 </head>
 <body>
@@ -148,6 +177,42 @@
     </div>
     <p class="workflow-note">Actual add-on workflow on one wall. The fracture view is slightly expanded to show the cuts. Orange and blue distinguish neighboring pieces. Physics requires setup and collider assignment.</p>
   </section>
+
+  <details class="benchmark" id="benchmark">
+    <summary class="benchmark-toggle wrap">
+      <span>
+        <span class="benchmark-title">Test performance for free</span>
+        <span class="benchmark-description">Download the Simple Benchmark from the free version of Project Damage. Install the ZIP as a Blender add-on and run it to see how Project Damage performs on your system.</span>
+      </span>
+      <span class="benchmark-action"><span>Click here</span><span class="benchmark-icon" aria-hidden="true"></span></span>
+    </summary>
+    <div class="benchmark-panel wrap">
+      <figure class="benchmark-figure">
+        <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/Project%20Damage%20-%20Simple%20Benchmark%20Collage.jpg" alt="Simple Benchmark collage showing Usual Work at three mesh densities, Classical Statue, Concrete Pipe with Ivy, Metal Barrel, and Peeling Concrete Barrier." width="2400" height="2000" loading="lazy" decoding="async">
+        <figcaption>The collage illustrates the workloads and shows a separate Mac run.</figcaption>
+      </figure>
+      <h3>Benchmark results</h3>
+      <ul class="benchmark-hardware">
+        <li><strong>macOS standard 1.0.0</strong> · Apple M4 Pro · Blender 5.2.3 LTS</li>
+        <li><strong>Windows standard 1.0.0</strong> · Intel Core i7-12700F · Blender 5.1.2</li>
+        <li><strong>Windows experimental 1.0.1</strong> · Intel Core i7-12700F · Blender 5.2.0 LTS</li>
+      </ul>
+      <div class="benchmark-table-wrap" tabindex="0" role="region" aria-label="Benchmark results by workload">
+        <table>
+          <thead><tr><th scope="col">Workload</th><th scope="col">Apple M4 Pro</th><th scope="col">Intel Core i7-12700F</th><th scope="col">Intel Core i7-12700F<br>Experimental</th></tr></thead>
+          <tbody>
+              <tr><th scope="row">Usual Work · Low Poly</th><td>0.156&nbsp;s</td><td>0.473&nbsp;s</td><td>0.241&nbsp;s</td></tr>
+              <tr><th scope="row">Usual Work · Medium Poly</th><td>0.178&nbsp;s</td><td>0.568&nbsp;s</td><td>0.280&nbsp;s</td></tr>
+              <tr><th scope="row">Usual Work · High Poly</th><td>0.752&nbsp;s</td><td>2.558&nbsp;s</td><td>1.066&nbsp;s</td></tr>
+              <tr><th scope="row">Classical Statue</th><td>1.381&nbsp;s</td><td>5.394&nbsp;s</td><td>2.811&nbsp;s</td></tr>
+              <tr><th scope="row">Concrete Pipe + Ivy</th><td>5.180&nbsp;s</td><td>13.300&nbsp;s</td><td>13.098&nbsp;s</td></tr>
+              <tr><th scope="row">Metal Barrel</th><td>1.143&nbsp;s</td><td>2.391&nbsp;s</td><td>2.372&nbsp;s</td></tr>
+              <tr><th scope="row">Peeling Concrete Barrier</th><td>9.922&nbsp;s</td><td>14.023&nbsp;s</td><td>14.002&nbsp;s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
 
   <section class="section wrap" id="limitations" aria-labelledby="limitations-title">
     <div class="limitations-intro"><h2 id="limitations-title">Before you<br>purchase.</h2><p class="lead">A few things to know about the geometry, performance and animation workflow, so you can plan how Project Damage fits your projects.</p></div>
