@@ -74,7 +74,10 @@
       border-left: 15px solid #fff;
       transform: translateX(2px);
     }
-    .hero-trailer:focus-within { outline: 3px solid var(--orange); outline-offset: 4px; }
+    .hero-trailer:has(:focus-visible), .hero-trailer.keyboard-focus:focus-within {
+      outline: 3px solid var(--orange);
+      outline-offset: 4px;
+    }
 
     @media (max-width: 620px) {
       .hero h1 {
@@ -312,13 +315,32 @@
     if (!/^https?:$/.test(location.protocol) || event.metaKey || event.ctrlKey ||
         event.shiftKey || event.altKey) return;
     event.preventDefault();
+    var stage = trailer.parentElement;
     var player = document.createElement('iframe');
     player.title = 'Project Damage — Official Trailer';
     player.referrerPolicy = 'strict-origin-when-cross-origin';
     player.allow = 'autoplay; encrypted-media';
     player.src = trailer.dataset.player;
     trailer.replaceWith(player);
-    player.focus();
+    if (event.detail === 0) {
+      stage.classList.add('keyboard-focus');
+      player.addEventListener('blur', function () {
+        stage.classList.remove('keyboard-focus');
+      }, { once: true });
+      player.focus({ preventScroll: true });
+    }
+
+    // Give focus back to the page so the native player can hide its controls.
+    function releasePlayerFocus() {
+      if (document.activeElement === player) player.blur();
+    }
+    stage.addEventListener('pointerleave', function (pointer) {
+      if (pointer.pointerType !== 'touch' && !stage.classList.contains('keyboard-focus') &&
+          !player.matches(':focus-visible')) releasePlayerFocus();
+    });
+    document.addEventListener('pointerdown', function (pointer) {
+      if (!stage.contains(pointer.target)) releasePlayerFocus();
+    }, true);
   });
   var tabs=Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
   function activate(tab,moveFocus){
