@@ -292,13 +292,26 @@
   </section>
 
   <section class="closing wrap" id="support" aria-labelledby="support-title"><div><h2 id="support-title">Give your scene<br>some history.</h2><p>Questions about Project Damage, setup or a particular effect? Get in touch with Lazy3D.</p></div><a class="contact-link" href="https://superhivemarket.com/creators/lazy3d" target="_blank" rel="noopener noreferrer">Contact on SuperHive <span class="arrow" aria-hidden="true">↗</span></a></section>
-  <footer class="footer wrap"><span class="footer-name">Project Damage / Lazy3D</span><span>Destruction, by design.<br>Tools for Blender artists.</span><a href="#top">Back to top ↑</a></footer>
+  <footer class="footer wrap"><span class="footer-name">Project Damage / Lazy3D</span><span>Destruction, by design.<br>Tools for Blender artists.</span><a id="back-to-top" href="#top">Back to top ↑</a></footer>
 </main>
 <script>
 /* If a host page listens for height updates, validate event.origin and
    event.source before using the project-damage:resize message. */
 (function(){
   'use strict';
+  var superhiveOrigin = 'https://superhivemarket.com';
+  if (window.top !== window && document.referrer.startsWith(superhiveOrigin + '/')) {
+    var productPath = '/products/project-damage--procedural-destruction-toolkit';
+    var referrer = new URL(document.referrer);
+    // Use the full page address when the host shares it, including any query.
+    var product = referrer.pathname.replace(/\/$/, '') === productPath
+      ? referrer : new URL(productPath, superhiveOrigin);
+    product.hash = '';
+    var backToTop = document.getElementById('back-to-top');
+    backToTop.href = product.href + '#';
+    backToTop.target = '_top';
+  }
+
   var tabs=Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
   function activate(tab,moveFocus){
     tabs.forEach(function(item){
