@@ -88,6 +88,100 @@
       .experimental-files{grid-template-columns:minmax(0,1fr);gap:1px}
       .experimental-files dd+dt{margin-top:4px}
     }
+    .effect-sequence > h2 { margin-bottom: clamp(20px, 3vw, 36px); }
+    .sequence-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: clamp(24px, 5vw, 70px);
+      align-items: start;
+    }
+    .sequence-preview {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+    }
+    .sequence-preview img {
+      display: block;
+      width: min(100%, 470px);
+      height: auto;
+      aspect-ratio: 4 / 5;
+      object-fit: contain;
+    }
+    .sequence-preview img, .sequence-zoom img {
+      mask-image: linear-gradient(to right, transparent, #000 12%, #000 80%, transparent),
+        linear-gradient(to bottom, #000 92%, transparent),
+        radial-gradient(ellipse 24% 10.2% at 46% 89.7%, #000 88%, transparent);
+      mask-composite: intersect, add;
+    }
+    .sequence-copy {
+      display: grid;
+      align-content: start;
+      gap: clamp(16px, 2.5vw, 30px);
+      min-width: 0;
+      padding-top: clamp(12px, 3vw, 42px);
+    }
+    .sequence-zoom {
+      display: none;
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+    .sequence-zoom img {
+      position: absolute;
+      inset: 0 auto auto 0;
+      max-width: none;
+      pointer-events: none;
+    }
+    @media (min-width: 621px) and (any-hover: hover) and (any-pointer: fine) {
+      .sequence-zoom { display: block; }
+      .sequence-preview img { cursor: zoom-in; }
+    }
+    .sequence-step {
+      margin-bottom: 10px;
+      font: 11px/1.45 var(--mono);
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .sequence-copy h3 { font-size: clamp(28px, 3.8vw, 48px); line-height: 1.1; letter-spacing: .022em; }
+    .sequence-description { max-width: 36ch; margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--muted); }
+    .sequence-buttons { display: grid; gap: 8px; max-width: 310px; }
+    .sequence-buttons button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 46px;
+      border: 1px solid var(--ink);
+      padding: 10px 14px;
+      background: var(--orange);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+    }
+    .sequence-buttons button:hover { background: #ff794c; }
+    .sequence-action-row { display: flex; gap: 8px; }
+    .sequence-next, .sequence-alternate { flex: 1; }
+    .sequence-buttons .sequence-revert {
+      flex: 0 0 auto;
+      padding-inline: 13px;
+      background: transparent;
+      border-color: var(--line);
+      font-size: 12px;
+    }
+    .sequence-buttons .sequence-revert:hover { background: var(--light); }
+    .sequence-buttons .sequence-reset { background: transparent; }
+    .sequence-buttons .sequence-reset:hover { background: var(--paper); }
+    .sequence-buttons button[aria-disabled="true"] { cursor: wait; }
+    .sequence-error { font-size: 13px; line-height: 1.5; }
+    @media (max-width: 620px) {
+      .sequence-card { grid-template-columns: minmax(0, 1fr); }
+      .sequence-copy { padding-top: 0; }
+      .sequence-buttons { max-width: none; }
+    }
+
     .benchmark{border-block:1px solid var(--ink)}
     .benchmark-toggle{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px 24px;background:var(--orange);color:var(--ink);padding-block:clamp(17px,2.5vw,28px);cursor:pointer;list-style:none}
     .benchmark-toggle::-webkit-details-marker{display:none}
@@ -203,6 +297,33 @@
       <figure class="step"><div class="image-placeholder" aria-hidden="true"></div><figcaption><div class="step-num">05 / SIMULATE</div><h3>Let it move.</h3><p>Add colliders, enable physics and bake when ready.</p></figcaption></figure>
     </div>
     <p class="workflow-note">Actual add-on workflow on one wall. The fracture view is slightly expanded to show the cuts. Orange and blue distinguish neighboring pieces. Physics requires setup and collider assignment.</p>
+  </section>
+
+  <section class="section wrap effect-sequence" id="effect-sequence" aria-labelledby="effect-sequence-title">
+    <h2 id="effect-sequence-title">Damage, layer by layer.</h2>
+    <div class="sequence-card">
+      <figure class="sequence-preview">
+        <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S0.png"
+          alt="Intact concrete wall before any effects are applied" width="3200" height="4000" loading="lazy" decoding="async">
+      </figure>
+      <div class="sequence-copy">
+        <div class="sequence-caption" aria-live="polite" aria-atomic="true">
+          <p class="sequence-step">Starting mesh</p>
+          <h3>Plain concrete</h3>
+          <p class="sequence-description">Start with a plain concrete wall. Add effects one at a time to see how they build on each other.</p>
+        </div>
+        <div class="sequence-buttons" hidden>
+          <div class="sequence-action-row">
+            <button type="button" class="sequence-next">Add New Effect <span aria-hidden="true">+</span></button>
+            <button type="button" class="sequence-alternate" hidden>Alternate Look Next <span aria-hidden="true">→</span></button>
+            <button type="button" class="sequence-revert" hidden>Revert</button>
+          </div>
+          <button type="button" class="sequence-reset" hidden>Go to Beginning <span aria-hidden="true">↺</span></button>
+          <p class="sequence-error" role="status" hidden>Image couldn’t load. Try again.</p>
+        </div>
+        <div class="sequence-zoom" aria-hidden="true"><img alt="" hidden></div>
+      </div>
+    </div>
   </section>
 
   <details class="benchmark" id="benchmark">
@@ -351,6 +472,123 @@
   window.addEventListener('resize',reportHeight);
   document.querySelectorAll('details').forEach(function(detail){detail.addEventListener('toggle',reportHeight);});
   reportHeight();
+
+  const sequence = document.getElementById('effect-sequence');
+  const preview = sequence.querySelector('.sequence-preview img');
+  const stepLabel = sequence.querySelector('.sequence-step');
+  const effectTitle = sequence.querySelector('h3');
+  const description = sequence.querySelector('.sequence-description');
+  const nextEffect = sequence.querySelector('.sequence-next');
+  const alternate = sequence.querySelector('.sequence-alternate');
+  const reset = sequence.querySelector('.sequence-reset');
+  const revert = sequence.querySelector('.sequence-revert');
+  const error = sequence.querySelector('.sequence-error');
+  const zoom = sequence.querySelector('.sequence-zoom');
+  const zoomImage = zoom.querySelector('img');
+  const magnification = 5;
+
+  function trackZoom(event) {
+    if (event.pointerType === 'touch' || !preview.naturalWidth || !preview.complete) return;
+    const square = zoom.clientWidth;
+    if (!square) return;
+
+    const bounds = preview.getBoundingClientRect();
+    const width = bounds.width * magnification;
+    const height = bounds.height * magnification;
+    const x = Math.min(0, Math.max(square - width, square / 2 - (event.clientX - bounds.left) * magnification));
+    const y = Math.min(0, Math.max(square - height, square / 2 - (event.clientY - bounds.top) * magnification));
+    if (zoomImage.src !== preview.currentSrc) zoomImage.src = preview.currentSrc;
+    zoomImage.style.width = width + 'px';
+    zoomImage.style.height = height + 'px';
+    zoomImage.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+    zoomImage.hidden = false;
+  }
+
+  function clearZoom() {
+    zoomImage.hidden = true;
+  }
+
+  preview.addEventListener('pointermove', trackZoom);
+  preview.addEventListener('pointerleave', clearZoom);
+  preview.addEventListener('pointercancel', clearZoom);
+
+
+  const frames = [
+    [preview.src, effectTitle.textContent, description.textContent, preview.alt],
+    ['S1.png', 'Edge damage', 'Chip the sharp edges and break up the rim at the base of the wall.', 'Concrete wall with chipped edges and base'],
+    ['S2.png', 'Surface wear', 'Add subtle irregularities across the concrete face.', 'Chipped concrete wall with light surface wear'],
+    ['S3.png', 'Fracture', 'Run long cracks down the slab and across its base.', 'Concrete wall with long cracks running down to the base'],
+    ['S4.png', 'Bullet Hit', 'Add bullet impact marks across the concrete, with chipped edges around each hit.', 'Cracked concrete wall with scattered bullet impact marks'],
+    ['S5.png', 'Break and expose rebar', 'Cut away part of the concrete to expose the rebar. Project Damage automatically generates the reinforcement as procedural geometry inside the mesh.', 'Concrete wall with an opening that exposes a grid of rebar'],
+    ['S6.png', 'Fracture around the break', 'Add branching cracks around the opening and tie it into the damage across the wall.', 'Broken wall with additional cracks around the exposed rebar'],
+    ['S7.png', 'Ivy growth', 'Add ivy that climbs the wall and spreads across the base.', 'Cracked wall with exposed rebar and ivy'],
+    ['S8.png', 'Adaptive Displace', 'Add fine surface relief with high-quality displacement, adaptive subdivision, and Spin Groups support.', 'Finished concrete wall with detailed surface relief, exposed rebar and ivy'],
+    ['s8%20alt.png', 'Tall exposed rebar', 'Take away the upper section and leave long, bent bars exposed above the concrete.', 'Low concrete wall with long exposed rebar'],
+    ['1s8%20alt.png', 'Short exposed rebar', 'Try a shorter, uneven break with less steel projecting above the wall.', 'Low concrete wall with short exposed rebar and an irregular broken edge'],
+  ];
+  const lastEffect = 8;
+  const lastFrame = frames.length - 1;
+  let currentFrame = 0;
+  let upcomingImage;
+  let pending = false;
+
+  function prepareFrame(index) {
+    const image = new Image();
+    image.src = new URL(frames[index][0], frames[0][0]);
+    return { index, image };
+  }
+
+  function followingFrame() {
+    return currentFrame === lastFrame ? lastEffect : currentFrame + 1;
+  }
+
+  function prepareNextFrame() {
+    const index = followingFrame();
+    if (!upcomingImage || upcomingImage.index !== index) upcomingImage = prepareFrame(index);
+  }
+
+  async function showSequenceFrame(index, button) {
+    if (pending) return;
+    pending = true;
+    button.setAttribute('aria-disabled', 'true');
+    error.hidden = true;
+    const frame = upcomingImage && upcomingImage.index === index ? upcomingImage : prepareFrame(index);
+    try {
+      await frame.image.decode();
+      currentFrame = index;
+      clearZoom();
+      preview.src = frame.image.src;
+      preview.alt = frames[index][3];
+      effectTitle.textContent = frames[index][1];
+      description.textContent = frames[index][2];
+      stepLabel.textContent = index === 0 ? 'Starting mesh' : index <= lastEffect
+        ? 'Effect ' + index + ' of ' + lastEffect
+        : 'Alternate look ' + (index - lastEffect) + ' of ' + (lastFrame - lastEffect);
+      const finished = index >= lastEffect;
+      nextEffect.hidden = finished;
+      revert.hidden = index === 0;
+      reset.hidden = alternate.hidden = !finished;
+      if (button.hidden) (finished ? alternate : nextEffect).focus({ preventScroll: true });
+      upcomingImage = undefined;
+      prepareNextFrame();
+      reportHeight();
+    } catch {
+      upcomingImage = undefined;
+      error.hidden = false;
+      reportHeight();
+    } finally {
+      button.removeAttribute('aria-disabled');
+      pending = false;
+    }
+  }
+
+  nextEffect.addEventListener('click', () => showSequenceFrame(followingFrame(), nextEffect));
+  alternate.addEventListener('click', () => showSequenceFrame(followingFrame(), alternate));
+  reset.addEventListener('click', () => showSequenceFrame(0, reset));
+  revert.addEventListener('click', () => showSequenceFrame(currentFrame - 1, revert));
+  sequence.querySelector('.sequence-buttons').hidden = false;
+  if (preview.complete && preview.naturalWidth) prepareNextFrame();
+  else preview.addEventListener('load', prepareNextFrame, { once: true });
 })();
 </script>
 </body>
