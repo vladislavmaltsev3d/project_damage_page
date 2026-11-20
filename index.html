@@ -88,6 +88,73 @@
       .experimental-files{grid-template-columns:minmax(0,1fr);gap:1px}
       .experimental-files dd+dt{margin-top:4px}
     }
+    .break-it > h2 { margin-bottom: clamp(20px, 3vw, 36px); }
+    .break-tabs { border: 1px solid var(--ink); }
+    .break-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      align-items: start;
+      gap: clamp(22px, 5vw, 70px);
+      padding-block-start: clamp(18px, 4vw, 42px);
+    }
+    .break-preview {
+      width: min(100%, 400px);
+      aspect-ratio: 4 / 5;
+      display: grid;
+      place-items: center;
+      justify-self: center;
+    }
+    .break-preview img { display: block; width: 100%; height: auto; }
+    .break-placeholder { align-self: stretch; justify-self: stretch; background: var(--line); }
+    .break-control {
+      display: grid;
+      justify-items: center;
+      gap: 25px;
+      margin-top: clamp(35px, 9vw, 125px);
+      padding: 20px 12px;
+      text-align: center;
+    }
+    .break-button {
+      max-width: 100%;
+      min-width: min(100%, 200px);
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .break-button span {
+      display: block;
+      padding: clamp(12px, 2vw, 19px) clamp(22px, 5vw, 57px);
+      border: 1px solid var(--ink);
+      background: var(--orange);
+      color: var(--ink);
+      font: 500 clamp(30px, 5vw, 62px)/1 Impact, "Arial Black", Arial, sans-serif;
+      letter-spacing: .022em;
+      text-transform: uppercase;
+      transform: rotate(15deg);
+    }
+    .break-button:hover span { background: #ff794c; }
+    .break-button:disabled { cursor: default; opacity: .48; }
+    .break-button[aria-disabled="true"] { cursor: wait; }
+    .break-button:not(:disabled):not([aria-disabled="true"]):not(.break-reset) span {
+      animation: break-button-pulse 2.8s ease-in-out infinite;
+    }
+    .break-button.break-reset span {
+      background: transparent;
+      font: 700 14px/1.25 var(--sans);
+      text-transform: none;
+      transform: none;
+    }
+    .break-status { max-width: 24ch; font-size: 13px; line-height: 1.5; color: var(--muted); }
+    @keyframes break-button-pulse {
+      0%, 100% { transform: translateY(0) rotate(15deg) scale(1); }
+      50% { transform: translateY(-5px) rotate(13deg) scale(1.055); }
+    }
+    @media (max-width: 620px) {
+      .break-panel { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+      .break-preview { width: min(100%, 310px); }
+      .break-control { margin-top: 0; }
+    }
+
     .effect-sequence > h2 { margin-bottom: clamp(20px, 3vw, 36px); }
     .sequence-card {
       display: grid;
@@ -107,7 +174,7 @@
       aspect-ratio: 4 / 5;
       object-fit: contain;
     }
-    .sequence-preview img, .sequence-zoom img {
+    .sequence-preview img, .sequence-zoom img, .break-preview img {
       mask-image: linear-gradient(to right, transparent, #000 12%, #000 80%, transparent),
         linear-gradient(to bottom, #000 92%, transparent),
         radial-gradient(ellipse 24% 10.2% at 46% 89.7%, #000 88%, transparent);
@@ -226,6 +293,7 @@
       <div>
         <p class="lead">Give every surface a story. Shape chips, cracks and broken structures with an artist-directed damage toolkit for Blender.</p>
         <a class="text-link" href="#overview">Explore Project Damage <span class="arrow" aria-hidden="true">↘</span></a>
+        <a class="text-link" href="#break-it">Explore Project Damage <span class="arrow" aria-hidden="true">↘</span></a>
       </div>
     </div>
     <div class="hero-trailer">
@@ -242,6 +310,58 @@
     <div class="spec"><strong>575</strong><span>Presets included</span></div>
     <div class="spec"><strong>71</strong><span>Assets included</span></div>
   </div>
+
+  <section class="section wrap break-it" id="break-it" aria-labelledby="break-it-title">
+    <h2 id="break-it-title">Break It</h2>
+    <div class="break-demo">
+      <div class="tabs break-tabs" role="tablist" aria-label="Break It presets">
+        <button class="tab" id="break-tab-concrete" type="button" role="tab" aria-controls="break-concrete" aria-selected="true" tabindex="0">Concrete</button>
+        <button class="tab" id="break-tab-glass" type="button" role="tab" aria-controls="break-glass" aria-selected="false" tabindex="-1">Glass</button>
+        <button class="tab" id="break-tab-metal" type="button" role="tab" aria-controls="break-metal" aria-selected="false" tabindex="-1">Metal</button>
+        <button class="tab" id="break-tab-wood" type="button" role="tab" aria-controls="break-wood" aria-selected="false" tabindex="-1">Wood</button>
+        <button class="tab" id="break-tab-wall" type="button" role="tab" aria-controls="break-wall" aria-selected="false" tabindex="-1">Wall</button>
+      </div>
+      <div id="break-concrete" class="break-panel" role="tabpanel" aria-labelledby="break-tab-concrete" tabindex="0">
+        <figure class="break-preview">
+          <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S0.png" data-damaged-src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S1.png"
+            alt="Intact concrete wall" data-damaged-alt="Concrete wall with chipped edges and base"
+            width="3200" height="4000" loading="lazy" decoding="async">
+        </figure>
+        <div class="break-control">
+          <button type="button" class="break-button" disabled><span>Break It</span></button>
+          <p class="break-status" role="status" hidden>The damaged preview couldn’t load. Try again.</p>
+        </div>
+      </div>
+      <div id="break-glass" class="break-panel" role="tabpanel" aria-labelledby="break-tab-glass" tabindex="0" hidden>
+        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
+        <div class="break-control">
+          <button type="button" class="break-button" disabled><span>Break It</span></button>
+          <p class="break-status">Glass preview coming soon.</p>
+        </div>
+      </div>
+      <div id="break-metal" class="break-panel" role="tabpanel" aria-labelledby="break-tab-metal" tabindex="0" hidden>
+        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
+        <div class="break-control">
+          <button type="button" class="break-button" disabled><span>Break It</span></button>
+          <p class="break-status">Metal preview coming soon.</p>
+        </div>
+      </div>
+      <div id="break-wood" class="break-panel" role="tabpanel" aria-labelledby="break-tab-wood" tabindex="0" hidden>
+        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
+        <div class="break-control">
+          <button type="button" class="break-button" disabled><span>Break It</span></button>
+          <p class="break-status">Wood preview coming soon.</p>
+        </div>
+      </div>
+      <div id="break-wall" class="break-panel" role="tabpanel" aria-labelledby="break-tab-wall" tabindex="0" hidden>
+        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
+        <div class="break-control">
+          <button type="button" class="break-button" disabled><span>Break It</span></button>
+          <p class="break-status">Wall preview coming soon.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="section wrap" id="overview" aria-labelledby="overview-title">
     <div class="intro"><h2 id="overview-title">Less perfect.<br>More believable.</h2><p class="lead muted">A chipped edge. A split board. The structure behind a broken wall. Build the details that make a scene feel like something happened here.</p></div>
@@ -437,6 +557,8 @@
     backToTop.target = '_top';
   }
 
+  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
+    const tabs = Array.from(list.querySelectorAll('[role="tab"]'));
   var tabs=Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
   function activate(tab,moveFocus){
     tabs.forEach(function(item){
@@ -444,6 +566,30 @@
       item.setAttribute('aria-selected',String(active));
       item.tabIndex=active?0:-1;
       document.getElementById(item.getAttribute('aria-controls')).hidden=!active;
+
+    function activate(tab, moveFocus) {
+      tabs.forEach(function (item) {
+        const active = item === tab;
+        item.setAttribute('aria-selected', String(active));
+        item.tabIndex = active ? 0 : -1;
+        document.getElementById(item.getAttribute('aria-controls')).hidden = !active;
+      });
+      if (moveFocus) tab.focus();
+      reportHeight();
+    }
+
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener('click', function () { activate(tab, false); });
+      tab.addEventListener('keydown', function (event) {
+        let next;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = tabs.length - 1;
+        if (next === undefined) return;
+        event.preventDefault();
+        activate(tabs[next], true);
+      });
     });
     if(moveFocus)tab.focus();
     reportHeight();
@@ -476,6 +622,75 @@
   window.addEventListener('resize',reportHeight);
   document.querySelectorAll('details').forEach(function(detail){detail.addEventListener('toggle',reportHeight);});
   reportHeight();
+
+
+  const concretePanel = document.getElementById('break-concrete');
+  const wall = concretePanel.querySelector('img');
+  const intactWall = { src: wall.src, alt: wall.alt };
+  const breakButton = concretePanel.querySelector('.break-button');
+  const breakLabel = breakButton.querySelector('span');
+  const breakStatus = concretePanel.querySelector('.break-status');
+  const reduceBreakMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let damagedWall;
+  let wallIsBroken = false;
+
+  function loadDamagedWall() {
+    if (!damagedWall) {
+      damagedWall = new Image();
+      damagedWall.src = wall.dataset.damagedSrc;
+    }
+    return damagedWall;
+  }
+
+  function setWallBroken(isBroken) {
+    wallIsBroken = isBroken;
+    wall.src = isBroken ? damagedWall.src : intactWall.src;
+    wall.alt = isBroken ? wall.dataset.damagedAlt : intactWall.alt;
+    breakLabel.textContent = isBroken ? 'Reset preview' : 'Break It';
+    breakButton.classList.toggle('break-reset', isBroken);
+  }
+
+  breakButton.addEventListener('click', async function () {
+    if (breakButton.getAttribute('aria-disabled') === 'true') return;
+    breakStatus.hidden = true;
+    if (wallIsBroken) {
+      setWallBroken(false);
+      return;
+    }
+
+    breakButton.setAttribute('aria-disabled', 'true');
+    try {
+      await loadDamagedWall().decode();
+    } catch {
+      damagedWall = undefined;
+      breakStatus.hidden = false;
+      breakButton.removeAttribute('aria-disabled');
+      reportHeight();
+      return;
+    }
+
+    if (!reduceBreakMotion.matches && wall.animate) {
+      await wall.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translate(-9px, 3px) rotate(-1.6deg)' },
+      ], { duration: 80, easing: 'ease-out' }).finished;
+      setWallBroken(true);
+      await wall.animate([
+        { transform: 'translate(-9px, 3px) rotate(-1.6deg)' },
+        { transform: 'translate(7px, -3px) rotate(1.2deg)', offset: .25 },
+        { transform: 'translate(-4px, 1px) rotate(-.6deg)', offset: .53 },
+        { transform: 'translateX(2px)', offset: .76 },
+        { transform: 'translateX(0)' },
+      ], { duration: 240, easing: 'ease-out' }).finished;
+    } else {
+      setWallBroken(true);
+    }
+    breakButton.removeAttribute('aria-disabled');
+    reportHeight();
+  });
+  breakButton.disabled = false;
+  if (wall.complete && wall.naturalWidth) loadDamagedWall();
+  else wall.addEventListener('load', loadDamagedWall, { once: true });
 
   const sequence = document.getElementById('effect-sequence');
   const preview = sequence.querySelector('.sequence-preview img');
