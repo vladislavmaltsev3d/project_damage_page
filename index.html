@@ -89,70 +89,158 @@
       .experimental-files dd+dt{margin-top:4px}
     }
     .break-it > h2 { margin-bottom: clamp(20px, 3vw, 36px); }
-    .break-tabs { border: 1px solid var(--ink); }
+    .break-demo {
+      position: relative;
+      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin: 0; padding: 0; border: 0; min-width: 0;
+    }
+    .break-visually-hidden {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+    }
+    .break-tab {
+      min-height: 44px; display: grid; align-items: center;
+      padding: 12px clamp(4px, 1.6vw, 20px);
+      border: 1px solid var(--ink); border-right-width: 0;
+      font: 11px/1.4 var(--mono); text-transform: uppercase;
+      cursor: pointer; touch-action: manipulation;
+    }
+    .break-tab:last-of-type { border-right-width: 1px; }
+    .break-demo > input:checked + label { background: var(--ink); color: var(--paper); }
+    .break-demo > input:focus-visible + label { outline: 3px solid var(--orange); outline-offset: -4px; }
     .break-panel {
-      display: grid;
+      display: none; grid-column: 1 / -1;
       grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-      align-items: start;
-      gap: clamp(22px, 5vw, 70px);
-      padding-block-start: clamp(18px, 4vw, 42px);
+      grid-template-areas: "media control"; align-items: center;
+      gap: clamp(16px, 4vw, 58px); padding-block-start: clamp(16px, 2.8vw, 32px);
     }
+    #break-tab-concrete:checked ~ #break-concrete,
+    #break-tab-glass:checked ~ #break-glass,
+    #break-tab-metal:checked ~ #break-metal,
+    #break-tab-wood:checked ~ #break-wood,
+    #break-tab-wall:checked ~ #break-wall { display: grid; }
     .break-preview {
-      width: min(100%, 400px);
-      aspect-ratio: 4 / 5;
-      display: grid;
-      place-items: center;
-      justify-self: center;
+      grid-area: media; justify-self: center; position: relative; isolation: isolate;
+      width: min(100%, 400px); aspect-ratio: 4 / 5;
     }
-    .break-preview img { display: block; width: 100%; height: auto; }
-    .break-placeholder { align-self: stretch; justify-self: stretch; background: var(--line); }
-    .break-control {
-      display: grid;
-      justify-items: center;
-      gap: 25px;
-      margin-top: clamp(35px, 9vw, 125px);
-      padding: 20px 12px;
-      text-align: center;
-    }
+    .break-preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .break-result { visibility: hidden; }
+    .break-switch[open] ~ .break-preview:not([data-waiting]) .break-intact { visibility: hidden; }
+    .break-switch[open] ~ .break-preview:not([data-waiting]) .break-result { visibility: visible; }
+    .break-placeholder { background: var(--line); }
+    .break-switch, .break-placeholder-note { grid-area: control; justify-self: center; }
+    .break-switch { position: relative; min-width: 0; }
     .break-button {
-      max-width: 100%;
-      min-width: min(100%, 200px);
-      padding: 0;
-      border: 0;
-      background: transparent;
+      display: block; list-style: none; cursor: pointer; user-select: none;
+      position: relative; padding: 12px 5px; isolation: isolate;
+      min-width: clamp(150px, 19vw, 215px); text-align: center; touch-action: manipulation;
     }
-    .break-button span {
-      display: block;
-      padding: clamp(12px, 2vw, 19px) clamp(22px, 5vw, 57px);
-      border: 1px solid var(--ink);
-      background: var(--orange);
-      color: var(--ink);
-      font: 500 clamp(30px, 5vw, 62px)/1 Impact, "Arial Black", Arial, sans-serif;
-      letter-spacing: .022em;
-      text-transform: uppercase;
-      transform: rotate(15deg);
+    .break-button::-webkit-details-marker { display: none; }
+    .break-switch:not([open]) .break-button::before {
+      content: ""; position: absolute; z-index: -1; pointer-events: none;
+      inset: auto 17% 2px; height: 7px;
+      background: radial-gradient(ellipse closest-side, #37372f45, transparent);
     }
-    .break-button:hover span { background: #ff794c; }
-    .break-button:disabled { cursor: default; opacity: .48; }
-    .break-button[aria-disabled="true"] { cursor: wait; }
-    .break-button:not(:disabled):not([aria-disabled="true"]):not(.break-reset) span {
-      animation: break-button-pulse 2.8s ease-in-out infinite;
+    .break-button-face {
+      display: grid; place-items: center; min-height: 58px;
+      padding: 12px clamp(18px, 3vw, 34px); border: 1px solid var(--ink);
+      background: var(--orange); color: var(--ink);
+      font: 500 clamp(28px, 3vw, 42px)/1.06 Impact, "Arial Black", Arial, sans-serif;
+      letter-spacing: .025em; text-transform: uppercase;
+      transform: rotate(1deg); pointer-events: none;
     }
-    .break-button.break-reset span {
-      background: transparent;
-      font: 700 14px/1.25 var(--sans);
-      text-transform: none;
-      transform: none;
+    .break-reset-label { display: none; }
+    .break-switch[open] .break-hit-label { display: none; }
+    .break-switch[open] .break-reset-label { display: inline; }
+    .break-switch[open] .break-button-face {
+      transform: none; background: transparent; border-color: var(--line);
+      font: 600 14px/1.3 var(--sans); letter-spacing: 0; text-transform: none;
     }
-    .break-status { max-width: 24ch; font-size: 13px; line-height: 1.5; color: var(--muted); }
-    @keyframes break-button-pulse {
-      0%, 100% { transform: translateY(0) rotate(15deg) scale(1); }
-      50% { transform: translateY(-5px) rotate(13deg) scale(1.055); }
+    .break-status, .break-placeholder-note {
+      color: var(--muted); font-size: 13px; line-height: 1.45; text-align: center;
+    }
+    .break-status { position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px; }
+    .break-dust {
+      position: absolute; left: 68%; top: 84%; pointer-events: none;
+    }
+    .break-dust i {
+      position: absolute; width: 4px; height: 3px; opacity: 0;
+      background: #736f66; border-radius: 1px 2px 0 1px;
+    }
+    .break-dust i:nth-child(3n + 1) { left: -3px; top: 2px; }
+    .break-dust i:nth-child(3n + 2) { width: 3px; height: 2px; background: #928d80; --delay: 18ms; }
+    .break-dust i:nth-child(3n) { top: -3px; width: 2px; height: 2px; --delay: 32ms; }
+    .break-dust i:nth-child(1)  { --dx: 16px; --dy: -7px;  --fall: 9px; }
+    .break-dust i:nth-child(2)  { --dx: 32px; --dy: -15px; --fall: 6px; }
+    .break-dust i:nth-child(3)  { --dx: -7px; --dy: -10px; --fall: 8px; }
+    .break-dust i:nth-child(4)  { --dx: 10px; --dy: -3px;  --fall: 17px; }
+    .break-dust i:nth-child(5)  { --dx: 25px; --dy: -5px;  --fall: 14px; }
+    .break-dust i:nth-child(6)  { --dx: 18px; --dy: -18px; --fall: 3px; }
+    .break-dust i:nth-child(7)  { --dx: -5px; --dy: -3px;  --fall: 13px; }
+    .break-dust i:nth-child(8)  { --dx: 11px; --dy: -15px; --fall: 5px; }
+    .break-dust i:nth-child(9)  { --dx: 34px; --dy: -7px;  --fall: 10px; }
+    .break-dust i:nth-child(10) { --dx: 23px; --dy: -11px; --fall: 8px; }
+    .break-dust i:nth-child(11) { --dx: -12px; --dy: -7px; --fall: 12px; }
+    .break-dust i:nth-child(12) { --dx: 5px; --dy: -13px; --fall: 7px; }
+    .break-dust i:nth-child(13) { --dx: 21px; --dy: -4px; --fall: 18px; }
+    .break-dust i:nth-child(14) { --dx: -10px; --dy: -12px; --fall: 11px; }
+    .break-dust i:nth-child(15) { --dx: 28px; --dy: -16px; --fall: 4px; }
+    .break-dust i:nth-child(16) { --dx: 3px; --dy: -5px; --fall: 16px; }
+    .break-dust i:nth-child(17) { --dx: 13px; --dy: -9px; --fall: 12px; }
+    .break-dust i:nth-child(18) { --dx: 30px; --dy: -3px; --fall: 19px; }
+    .break-dust i:nth-child(19) { --dx: -15px; --dy: -4px; --fall: 15px; }
+    .break-dust i:nth-child(20) { --dx: 7px; --dy: -17px; --fall: 6px; }
+    .break-dust i:nth-child(21) { --dx: 20px; --dy: -14px; --fall: 13px; }
+    .break-dust i:nth-child(22) { --dx: -1px; --dy: -8px; --fall: 18px; }
+    .break-dust i:nth-child(23) { --dx: 27px; --dy: -8px; --fall: 11px; }
+    .break-dust i:nth-child(24) { --dx: 15px; --dy: -12px; --fall: 4px; }
+    @media (hover: hover) {
+      .break-demo > input:not(:checked) + label:hover, .break-switch[open] .break-button:hover .break-button-face { background: var(--light); }
+      .break-switch:not([open]) .break-button:hover .break-button-face { background: #ff6c3b; }
+    }
+    .break-button:is(:active, .is-pressed) .break-button-face {
+      box-shadow: inset 0 2px 0 #15161438;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .break-button:is(:active, .is-pressed) .break-button-face {
+        scale: .965; translate: 0 3px;
+      }
+      .break-switch[open] .break-button-face { animation: break-release 160ms ease-out; }
+      .break-switch:not([open]) .break-button-face { animation: break-float 3.4s ease-in-out infinite; }
+      .break-switch:not([open]) .break-button::before { animation: break-shadow 3.4s ease-in-out infinite; }
+      .break-switch[open] ~ .break-preview { animation: break-impact 210ms ease-out; }
+      .break-switch[open] ~ .break-preview .break-dust i { animation: break-chip 360ms linear var(--delay, 0ms) both; }
+    }
+    @keyframes break-float {
+      0%, 100% { transform: translate(-1px, 0) rotate(-1.4deg); }
+      50% { transform: translate(1px, -7px) rotate(2.2deg); }
+    }
+    @keyframes break-release {
+      0% { scale: .965; translate: 0 3px; }
+      65% { scale: 1.012; translate: 0 -1px; }
+      100% { scale: 1; translate: 0 0; }
+    }
+    @keyframes break-shadow {
+      0%, 100% { opacity: .8; transform: scaleX(1); }
+      50% { opacity: .45; transform: scaleX(.82); }
+    }
+    @keyframes break-impact {
+      0%, 100% { transform: none; }
+      17% { transform: translate(-6px, 2px) rotate(-.48deg); }
+      46% { transform: translate(3px, -1px) rotate(.24deg); }
+      74% { transform: translateX(-1.2px); }
+    }
+    @keyframes break-chip {
+      0% { opacity: 0; transform: translate(0, 0); }
+      14% { opacity: .68; }
+      45% { opacity: .55; transform: translate(calc(var(--dx) * .55), var(--dy)) rotate(20deg); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--fall)) rotate(62deg); }
     }
     @media (max-width: 620px) {
-      .break-panel { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-      .break-preview { width: min(100%, 310px); }
-      .break-control { margin-top: 0; }
+      .break-tab { justify-items: center; font-size: 9px; }
+      .break-panel { grid-template-columns: minmax(0, 1fr); grid-template-areas: "media" "control"; gap: 12px; }
+      .break-preview { width: min(100%, 285px); }
+      .break-status { position: static; }
     }
 
     .effect-sequence > h2 { margin-bottom: clamp(20px, 3vw, 36px); }
@@ -313,54 +401,53 @@
 
   <section class="section wrap break-it" id="break-it" aria-labelledby="break-it-title">
     <h2 id="break-it-title">Break It</h2>
-    <div class="break-demo">
-      <div class="tabs break-tabs" role="tablist" aria-label="Break It presets">
-        <button class="tab" id="break-tab-concrete" type="button" role="tab" aria-controls="break-concrete" aria-selected="true" tabindex="0">Concrete</button>
-        <button class="tab" id="break-tab-glass" type="button" role="tab" aria-controls="break-glass" aria-selected="false" tabindex="-1">Glass</button>
-        <button class="tab" id="break-tab-metal" type="button" role="tab" aria-controls="break-metal" aria-selected="false" tabindex="-1">Metal</button>
-        <button class="tab" id="break-tab-wood" type="button" role="tab" aria-controls="break-wood" aria-selected="false" tabindex="-1">Wood</button>
-        <button class="tab" id="break-tab-wall" type="button" role="tab" aria-controls="break-wall" aria-selected="false" tabindex="-1">Wall</button>
-      </div>
-      <div id="break-concrete" class="break-panel" role="tabpanel" aria-labelledby="break-tab-concrete" tabindex="0">
-        <figure class="break-preview">
-          <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S0.png" data-damaged-src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S1.png"
-            alt="Intact concrete wall" data-damaged-alt="Concrete wall with chipped edges and base"
-            width="3200" height="4000" loading="lazy" decoding="async">
+    <fieldset class="break-demo">
+      <legend class="break-visually-hidden">Break It presets</legend>
+      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-concrete" aria-controls="break-concrete" checked>
+      <label class="break-tab" for="break-tab-concrete">Concrete</label>
+      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-glass" aria-controls="break-glass">
+      <label class="break-tab" for="break-tab-glass">Glass</label>
+      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-metal" aria-controls="break-metal">
+      <label class="break-tab" for="break-tab-metal">Metal</label>
+      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-wood" aria-controls="break-wood">
+      <label class="break-tab" for="break-tab-wood">Wood</label>
+      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-wall" aria-controls="break-wall">
+      <label class="break-tab" for="break-tab-wall">Wall</label>
+      <div class="break-panel" id="break-concrete">
+        <details class="break-switch">
+          <summary class="break-button" aria-controls="break-concrete-preview">
+            <span class="break-button-face"><span class="break-hit-label">Break It</span><span class="break-reset-label">Reset preview</span></span>
+          </summary>
+          <p class="break-status" role="status" hidden></p>
+        </details>
+        <figure class="break-preview" id="break-concrete-preview">
+          <img class="break-intact" src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S0.png" alt="Intact concrete wall" width="3200" height="4000" loading="lazy">
+          <img class="break-result" src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S1.png" alt="Concrete wall with chipped edges and base" width="3200" height="4000" loading="lazy">
+          <span class="break-dust" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </span>
         </figure>
-        <div class="break-control">
-          <button type="button" class="break-button" disabled><span>Break It</span></button>
-          <p class="break-status" role="status" hidden>The damaged preview couldn’t load. Try again.</p>
-        </div>
       </div>
-      <div id="break-glass" class="break-panel" role="tabpanel" aria-labelledby="break-tab-glass" tabindex="0" hidden>
-        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
-        <div class="break-control">
-          <button type="button" class="break-button" disabled><span>Break It</span></button>
-          <p class="break-status">Glass preview coming soon.</p>
-        </div>
+      <div class="break-panel" id="break-glass">
+        <div class="break-preview break-placeholder" aria-hidden="true"></div>
+        <p class="break-placeholder-note">Glass preview coming soon.</p>
       </div>
-      <div id="break-metal" class="break-panel" role="tabpanel" aria-labelledby="break-tab-metal" tabindex="0" hidden>
-        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
-        <div class="break-control">
-          <button type="button" class="break-button" disabled><span>Break It</span></button>
-          <p class="break-status">Metal preview coming soon.</p>
-        </div>
+      <div class="break-panel" id="break-metal">
+        <div class="break-preview break-placeholder" aria-hidden="true"></div>
+        <p class="break-placeholder-note">Metal preview coming soon.</p>
       </div>
-      <div id="break-wood" class="break-panel" role="tabpanel" aria-labelledby="break-tab-wood" tabindex="0" hidden>
-        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
-        <div class="break-control">
-          <button type="button" class="break-button" disabled><span>Break It</span></button>
-          <p class="break-status">Wood preview coming soon.</p>
-        </div>
+      <div class="break-panel" id="break-wood">
+        <div class="break-preview break-placeholder" aria-hidden="true"></div>
+        <p class="break-placeholder-note">Wood preview coming soon.</p>
       </div>
-      <div id="break-wall" class="break-panel" role="tabpanel" aria-labelledby="break-tab-wall" tabindex="0" hidden>
-        <figure class="break-preview"><div class="break-placeholder" aria-hidden="true"></div></figure>
-        <div class="break-control">
-          <button type="button" class="break-button" disabled><span>Break It</span></button>
-          <p class="break-status">Wall preview coming soon.</p>
-        </div>
+      <div class="break-panel" id="break-wall">
+        <div class="break-preview break-placeholder" aria-hidden="true"></div>
+        <p class="break-placeholder-note">Wall preview coming soon.</p>
       </div>
-    </div>
+    </fieldset>
   </section>
 
   <section class="section wrap" id="overview" aria-labelledby="overview-title">
@@ -624,73 +711,47 @@
   reportHeight();
 
 
-  const concretePanel = document.getElementById('break-concrete');
-  const wall = concretePanel.querySelector('img');
-  const intactWall = { src: wall.src, alt: wall.alt };
-  const breakButton = concretePanel.querySelector('.break-button');
-  const breakLabel = breakButton.querySelector('span');
-  const breakStatus = concretePanel.querySelector('.break-status');
-  const reduceBreakMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let damagedWall;
-  let wallIsBroken = false;
-
-  function loadDamagedWall() {
-    if (!damagedWall) {
-      damagedWall = new Image();
-      damagedWall.src = wall.dataset.damagedSrc;
-    }
-    return damagedWall;
-  }
-
-  function setWallBroken(isBroken) {
-    wallIsBroken = isBroken;
-    wall.src = isBroken ? damagedWall.src : intactWall.src;
-    wall.alt = isBroken ? wall.dataset.damagedAlt : intactWall.alt;
-    breakLabel.textContent = isBroken ? 'Reset preview' : 'Break It';
-    breakButton.classList.toggle('break-reset', isBroken);
-  }
-
-  breakButton.addEventListener('click', async function () {
-    if (breakButton.getAttribute('aria-disabled') === 'true') return;
-    breakStatus.hidden = true;
-    if (wallIsBroken) {
-      setWallBroken(false);
-      return;
-    }
-
-    breakButton.setAttribute('aria-disabled', 'true');
-    try {
-      await loadDamagedWall().decode();
-    } catch {
-      damagedWall = undefined;
-      breakStatus.hidden = false;
-      breakButton.removeAttribute('aria-disabled');
-      reportHeight();
-      return;
-    }
-
-    if (!reduceBreakMotion.matches && wall.animate) {
-      await wall.animate([
-        { transform: 'translateX(0)' },
-        { transform: 'translate(-9px, 3px) rotate(-1.6deg)' },
-      ], { duration: 80, easing: 'ease-out' }).finished;
-      setWallBroken(true);
-      await wall.animate([
-        { transform: 'translate(-9px, 3px) rotate(-1.6deg)' },
-        { transform: 'translate(7px, -3px) rotate(1.2deg)', offset: .25 },
-        { transform: 'translate(-4px, 1px) rotate(-.6deg)', offset: .53 },
-        { transform: 'translateX(2px)', offset: .76 },
-        { transform: 'translateX(0)' },
-      ], { duration: 240, easing: 'ease-out' }).finished;
-    } else {
-      setWallBroken(true);
-    }
-    breakButton.removeAttribute('aria-disabled');
-    reportHeight();
+  const breakPreview = document.getElementById('break-concrete-preview');
+  const breakSwitch = document.querySelector('#break-concrete .break-switch');
+  const breakTrigger = breakSwitch.querySelector('summary');
+  breakTrigger.addEventListener('pointerdown', function (event) {
+    if (event.isPrimary && event.button === 0) breakTrigger.classList.add('is-pressed');
   });
-  breakButton.disabled = false;
-  if (wall.complete && wall.naturalWidth) loadDamagedWall();
-  else wall.addEventListener('load', loadDamagedWall, { once: true });
+  function releaseBreakTrigger() { breakTrigger.classList.remove('is-pressed'); }
+  ['pointerup', 'pointercancel', 'pointerleave', 'lostpointercapture', 'blur'].forEach(function (type) {
+    breakTrigger.addEventListener(type, releaseBreakTrigger);
+  });
+  breakTrigger.addEventListener('click', function (event) {
+    if (event.isTrusted && typeof navigator.vibrate === 'function') {
+      navigator.vibrate(15);
+    }
+  });
+  const breakResult = breakPreview.querySelector('.break-result');
+  const breakStatus = breakSwitch.querySelector('.break-status');
+  let breakImageFailed = false;
+
+  function updateBreakStatus() {
+    const ready = breakResult.complete && breakResult.naturalWidth > 0;
+    breakPreview.toggleAttribute('data-waiting', !ready);
+    breakStatus.hidden = !breakSwitch.open || ready;
+    breakStatus.textContent = breakStatus.hidden ? '' : breakImageFailed
+      ? 'Preview unavailable. Reset and try again.' : 'Loading preview…';
+  }
+
+  breakResult.addEventListener('load', updateBreakStatus);
+  breakResult.addEventListener('error', function () {
+    breakImageFailed = true;
+    updateBreakStatus();
+  });
+  breakSwitch.addEventListener('toggle', function () {
+    if (breakSwitch.open && breakImageFailed) {
+      breakImageFailed = false;
+      breakResult.src = breakResult.src;
+    }
+    updateBreakStatus();
+  });
+  breakImageFailed = breakResult.complete && !breakResult.naturalWidth;
+  updateBreakStatus();
 
   const sequence = document.getElementById('effect-sequence');
   const preview = sequence.querySelector('.sequence-preview img');
