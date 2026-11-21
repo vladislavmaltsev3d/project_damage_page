@@ -136,11 +136,6 @@
       min-width: clamp(150px, 19vw, 215px); text-align: center; touch-action: manipulation;
     }
     .break-button::-webkit-details-marker { display: none; }
-    .break-switch:not([open], .glass-reset) .break-button::before {
-      content: ""; position: absolute; z-index: -1; pointer-events: none;
-      inset: auto 17% 2px; height: 7px;
-      background: radial-gradient(ellipse closest-side, #37372f45, transparent);
-    }
     .break-button-face {
       display: grid; place-items: center; min-height: 58px;
       padding: 12px clamp(18px, 3vw, 34px); border: 1px solid var(--ink);
@@ -197,16 +192,12 @@
       .break-demo > input:not(:checked) + label:hover, .break-switch:is([open], .glass-reset) .break-button:hover .break-button-face { background: var(--light); }
       .break-switch:not([open], .glass-reset) .break-button:hover .break-button-face { background: #ff6c3b; }
     }
-    .break-button:is(:active, .is-pressed) .break-button-face {
-      box-shadow: inset 0 2px 0 #15161438;
-    }
     @media (prefers-reduced-motion: no-preference) {
       .break-button:is(:active, .is-pressed) .break-button-face {
         scale: .965; translate: 0 3px;
       }
       .break-switch:is([open], .glass-reset) .break-button-face { animation: break-release 160ms ease-out; }
       .break-switch:not([open], .glass-reset) .break-button-face { animation: break-float 3.4s ease-in-out infinite; }
-      .break-switch:not([open], .glass-reset) .break-button::before { animation: break-shadow 3.4s ease-in-out infinite; }
       .break-switch[open] ~ .break-preview { animation: break-impact 210ms ease-out; }
       .break-switch[open] ~ .break-preview .break-dust i { animation: break-chip 360ms linear var(--delay, 0ms) both; }
     }
@@ -218,10 +209,6 @@
       0% { scale: .965; translate: 0 3px; }
       65% { scale: 1.012; translate: 0 -1px; }
       100% { scale: 1; translate: 0 0; }
-    }
-    @keyframes break-shadow {
-      0%, 100% { opacity: .8; transform: scaleX(1); }
-      50% { opacity: .45; transform: scaleX(.82); }
     }
     @keyframes break-impact {
       0%, 100% { transform: none; }
@@ -251,15 +238,76 @@
       background-position: center, center var(--glass-y);
       background-size: 100% 100%, 100% 508.3333333%; background-repeat: no-repeat;
     }
-    .glass-preview .break-dust { left: var(--hit-x); top: var(--hit-y); }
-    .glass-preview .break-dust i { background: #d6e4ef; }
-    .glass-preview .break-dust i:nth-child(3n + 2) { background: #91abc0; }
+    .glass-stage .glass-preview { container-type: inline-size; overflow: hidden; }
+    /* Each origin is measured within the 2:1 render. */
+    .glass-emitter {
+      position: absolute; width: 0; height: 0; pointer-events: none;
+      left: var(--hit-x); top: var(--hit-y);
+      --unit: clamp(.68px, .14cqw, 1.4px);
+    }
+    .glass-emitter:nth-of-type(2) { transform: scaleX(-1); }
+    .glass-emitter:nth-of-type(3) { transform: scaleX(.86); }
+    .glass-emitter i {
+      position: absolute; top: 0; left: 0; opacity: 0; translate: -50% -50%;
+      width: calc(11 * var(--unit)); height: calc(6 * var(--unit));
+      clip-path: polygon(0 0, 100% 31%, 22% 100%);
+      background: linear-gradient(150deg, #f6ffff 0 18%, #cee6f2a8 24% 58%, #7390a78a 62% 100%);
+    }
+    .glass-emitter i:nth-child(3n + 2) {
+      width: calc(7 * var(--unit)); height: calc(9 * var(--unit)); --lag: 16ms;
+      clip-path: polygon(24% 0, 100% 18%, 68% 62%, 0 100%);
+    }
+    .glass-emitter i:nth-child(3n) {
+      width: calc(8 * var(--unit)); height: calc(3.5 * var(--unit)); --lag: 32ms;
+      clip-path: polygon(0 22%, 100% 0, 65% 100%);
+    }
+    .glass-emitter i:nth-child(1) { --dx: -30; --lift: -15; --drop: 24; --start: -36deg; --turn: 65deg; }
+    .glass-emitter i:nth-child(2) { --dx: 12; --lift: -28; --drop: 17; --start: 21deg; --turn: -71deg; }
+    .glass-emitter i:nth-child(3) { --dx: -15; --lift: -8; --drop: 36; --start: 83deg; --turn: 155deg; }
+    .glass-emitter i:nth-child(4) { --dx: 37; --lift: -11; --drop: 14; --start: -18deg; --turn: 96deg; }
+    .glass-emitter i:nth-child(5) { --dx: -9; --lift: -25; --drop: 22; --start: 50deg; --turn: 171deg; }
+    .glass-emitter i:nth-child(6) { --dx: 21; --lift: -5; --drop: 39; --start: 14deg; --turn: -55deg; }
+    .glass-emitter i:nth-child(7) { --dx: -41; --lift: -4; --drop: 21; --start: -56deg; --turn: 82deg; }
+    .glass-emitter i:nth-child(8) { --dx: 6; --lift: -12; --drop: 47; --start: -14deg; --turn: -125deg; }
+    .glass-emitter i:nth-child(9) { --dx: 30; --lift: -23; --drop: 18; --start: 44deg; --turn: -59deg; }
+    .glass-emitter i:nth-child(10) { --dx: -21; --lift: -19; --drop: 15; --start: -67deg; --turn: -187deg; }
+    .glass-emitter i:nth-child(11) { --dx: 16; --lift: -16; --drop: 38; --start: 6deg; --turn: 118deg; }
+    .glass-emitter i:nth-child(12) { --dx: -4; --lift: -8; --drop: 45; --start: 29deg; --turn: -108deg; }
+    /* The original 460 ms flight occupies the first third of the lifetime. */
+    @keyframes glass-shard {
+      0% { opacity: 0; transform: rotate(var(--start)) scale(.5); }
+      3.333333% { opacity: .93; }
+      12.666667% {
+        opacity: .85;
+        transform: translate(calc(var(--unit) * var(--dx) * .56), calc(var(--unit) * var(--lift))) rotate(var(--start));
+      }
+      33.333333% {
+        opacity: .80;
+        transform: translate(calc(var(--unit) * var(--dx)), calc(var(--unit) * var(--drop))) rotate(var(--turn)) scale(.68);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(
+          calc(var(--unit) * var(--dx) * (1 + .44 * var(--coast))),
+          calc(var(--unit) * (var(--drop) + (var(--drop) - var(--lift)) * var(--coast)))
+        ) rotate(calc(var(--turn) + (var(--turn) - var(--start)) * var(--coast))) scale(.6);
+      }
+    }
+    @keyframes glass-gravity {
+      from { translate: -50% -50%; }
+      to { translate: -50% calc(-50% + 120 * var(--unit)); }
+    }
     @media (min-width: 621px) {
       #break-glass { grid-template-columns: minmax(0, 2.15fr) minmax(0, 1fr); }
     }
     @media (prefers-reduced-motion: no-preference) {
       .glass-stage:not(.glass-start) .glass-preview { animation: break-impact 210ms ease-out; }
-      .glass-stage .break-dust i { animation: break-chip 360ms linear var(--delay, 0ms) both; }
+      .glass-emitter i {
+        /* Carry the final velocity of the old descent through the extra 920 ms. */
+        --coast: calc(920 / (460 * .62));
+        animation: glass-shard 1380ms linear var(--lag, 0ms) both,
+          glass-gravity 920ms cubic-bezier(.333333, 0, .666667, .333333) calc(460ms + var(--lag, 0ms)) forwards;
+      }
     }
 
     .effect-sequence { container-type: inline-size; }
@@ -2562,7 +2610,7 @@ P+TsaJGtbaIBZosMyF/GzQz/6KU1gMYHxr7AaTfQ2xAT2wQlVJiYE30IEGGOc4WulsUJb+QWX8N1m/y2
         <span class="glass-target" id="glass-hit-0" hidden></span>
         <div class="glass-stage glass-start">
           <figure class="break-preview glass-preview" role="img" aria-label="Intact glass in a weathered wooden window frame"
-            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%200r.jpg'); --glass-y: 0%; --hit-x: 0%; --hit-y: 0%"></figure>
+            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%200r.jpg'); --glass-y: 0%"></figure>
           <div class="break-switch">
             <a class="break-button" href="#glass-hit-1" aria-controls="break-glass">
               <span class="break-button-face">Break It</span>
@@ -2572,12 +2620,10 @@ P+TsaJGtbaIBZosMyF/GzQz/6KU1gMYHxr7AaTfQ2xAT2wQlVJiYE30IEGGOc4WulsUJb+QWX8N1m/y2
         <span class="glass-target" id="glass-hit-1" hidden></span>
         <div class="glass-stage">
           <figure class="break-preview glass-preview" role="img" aria-label="Fine cracks spread across the window glass"
-            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%201r.jpg'); --glass-y: 25%; --hit-x: 77%; --hit-y: 33%"><span class="break-dust" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-          </span></figure>
+            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%201r.jpg'); --glass-y: 25%">
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 20.80%; --hit-y: 19.84%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 84.32%; --hit-y: 6.72%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          </figure>
           <div class="break-switch">
             <a class="break-button" href="#glass-hit-2" aria-controls="break-glass">
               <span class="break-button-face">Break It</span>
@@ -2587,12 +2633,10 @@ P+TsaJGtbaIBZosMyF/GzQz/6KU1gMYHxr7AaTfQ2xAT2wQlVJiYE30IEGGOc4WulsUJb+QWX8N1m/y2
         <span class="glass-target" id="glass-hit-2" hidden></span>
         <div class="glass-stage">
           <figure class="break-preview glass-preview" role="img" aria-label="Branching cracks cover both panes"
-            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%202r.jpg'); --glass-y: 50%; --hit-x: 69%; --hit-y: 56%"><span class="break-dust" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-          </span></figure>
+            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%202r.jpg'); --glass-y: 50%">
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 17.19%; --hit-y: 14.48%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 68.41%; --hit-y: 41.70%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          </figure>
           <div class="break-switch">
             <a class="break-button" href="#glass-hit-3" aria-controls="break-glass">
               <span class="break-button-face">Break It</span>
@@ -2602,12 +2646,11 @@ P+TsaJGtbaIBZosMyF/GzQz/6KU1gMYHxr7AaTfQ2xAT2wQlVJiYE30IEGGOc4WulsUJb+QWX8N1m/y2
         <span class="glass-target" id="glass-hit-3" hidden></span>
         <div class="glass-stage">
           <figure class="break-preview glass-preview" role="img" aria-label="Small openings appear among the cracked pieces of glass"
-            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%203.jpg'); --glass-y: 75%; --hit-x: 77%; --hit-y: 24%"><span class="break-dust" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-          </span></figure>
+            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%203.jpg'); --glass-y: 75%">
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 19.43%; --hit-y: 13.30%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 74.88%; --hit-y: 22.56%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 61.88%; --hit-y: 66.73%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          </figure>
           <div class="break-switch">
             <a class="break-button" href="#glass-hit-4" aria-controls="break-glass">
               <span class="break-button-face">Break It</span>
@@ -2617,12 +2660,10 @@ P+TsaJGtbaIBZosMyF/GzQz/6KU1gMYHxr7AaTfQ2xAT2wQlVJiYE30IEGGOc4WulsUJb+QWX8N1m/y2
         <span class="glass-target" id="glass-hit-4" hidden></span>
         <div class="glass-stage">
           <figure class="break-preview glass-preview" role="img" aria-label="Large pieces have fallen away, leaving jagged edges in both panes"
-            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%204.jpg'); --glass-y: 100%; --hit-x: 29%; --hit-y: 44%"><span class="break-dust" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-          </span></figure>
+            style="--glass-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%204.jpg'); --glass-y: 100%">
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 13.59%; --hit-y: 48.57%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="glass-emitter" aria-hidden="true" style="--hit-x: 66.37%; --hit-y: 36.18%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          </figure>
           <div class="break-switch glass-reset">
             <a class="break-button" href="#glass-hit-0" aria-controls="break-glass">
               <span class="break-button-face">Reset preview</span>
