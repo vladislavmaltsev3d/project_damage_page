@@ -25,17 +25,18 @@
     .all-effects[open]>summary::after{content:"−"}
     .all-effects-panel{background:#dedfda}
     .all-effects-panel img{display:block;width:100%;height:auto}
-    .physics-box {
-      margin: 0 clamp(20px, 4vw, 48px) clamp(32px, 5vw, 64px);
-      border: 1px solid var(--ink);
-    }
+    .section.physics-section { padding-block-end: clamp(32px, 5vw, 64px); }
     .physics-heading {
       display: flex; flex-wrap: wrap; align-items: baseline;
-      gap: 8px clamp(22px, 3vw, 42px); padding: clamp(16px, 2.5vw, 30px);
+      gap: 8px clamp(22px, 3vw, 42px); margin-bottom: clamp(16px, 2.5vw, 30px);
     }
     .physics-heading h2 { font-size: clamp(36px, 6vw, 76px); line-height: 1.04; }
     .physics-heading p { font-size: clamp(14px, 1.5vw, 17px); line-height: 1.45; color: var(--muted); }
-    .physics-box .control-gallery { border: 0; border-top: 1px solid var(--ink); }
+    .physics-demos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(8px, 2vw, 22px); }
+    .physics-demo-wide { grid-column: 1 / -1; }
+    .gif-example img { display: block; width: 100%; height: auto; background: var(--line); }
+    .gif-example figcaption { padding: 10px 0; border-bottom: 1px solid var(--line); font: 600 14px/1.4 var(--sans); }
+    .control-statue { width: min(100%, 1000px); margin: clamp(24px, 4vw, 48px) auto 0; }
     #control { padding-block: clamp(28px, 4.6vw, 56px); }
     .control-layout {
       display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
@@ -50,14 +51,13 @@
       border: 1px solid var(--ink); background: var(--light);
     }
     .control-page { display: none; grid-area: 1 / 1 / 2 / -1; min-width: 0; }
-    #physics-fracture:checked ~ #physics-fracture-panel,
-    #physics-rigid:checked ~ #physics-rigid-panel,
-    #control-overview:checked ~ .control-placeholder,
-    #control-demos:checked ~ .control-examples { display: block; }
+    #drawing-structure:checked ~ #drawing-structure-panel,
+    #drawing-surface:checked ~ #drawing-surface-panel { display: block; }
     .control-example + .control-example { border-top: 1px solid var(--ink); }
     .control-media { width: 100%; aspect-ratio: 2 / 1; background: var(--line) center / contain no-repeat; }
-    /* Request the animations only when the drawing examples are selected. */
-    #control-demos:checked ~ .control-examples .control-media { background-image: var(--demo-gif); }
+    /* Keep the other set of GIFs off the network until its tab opens. */
+    #drawing-structure:checked ~ #drawing-structure-panel .control-media,
+    #drawing-surface:checked ~ #drawing-surface-panel .control-media { background-image: var(--demo-gif); }
     .control-page figcaption, .break-card figcaption {
       display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap;
       gap: 3px 12px; padding: 10px 14px; border-top: 1px solid var(--ink);
@@ -71,14 +71,10 @@
     }
     .control-choice:last-child { border-left: 1px solid var(--ink); }
     .control-choice:hover { background: var(--paper); }
-    #physics-fracture:checked ~ [for="physics-fracture"],
-    #physics-rigid:checked ~ [for="physics-rigid"],
-    #control-overview:checked ~ [for="control-overview"],
-    #control-demos:checked ~ [for="control-demos"] { color: var(--paper); background: var(--ink); }
-    #physics-fracture:focus-visible ~ [for="physics-fracture"],
-    #physics-rigid:focus-visible ~ [for="physics-rigid"],
-    #control-overview:focus-visible ~ [for="control-overview"],
-    #control-demos:focus-visible ~ [for="control-demos"] { outline: 3px solid var(--orange); outline-offset: -4px; }
+    #drawing-structure:checked ~ [for="drawing-structure"],
+    #drawing-surface:checked ~ [for="drawing-surface"] { color: var(--paper); background: var(--ink); }
+    #drawing-structure:focus-visible ~ [for="drawing-structure"],
+    #drawing-surface:focus-visible ~ [for="drawing-surface"] { outline: 3px solid var(--orange); outline-offset: -4px; }
     @media (max-width: 700px) {
       .control-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; }
       .control-copy h2 { font-size: clamp(37px, 7.7vw, 52px); }
@@ -889,26 +885,32 @@
     </details>
   </section>
 
-  <section class="physics-box" id="physics" aria-labelledby="physics-title">
+  <section class="section physics-section wrap" id="physics" aria-labelledby="physics-title">
     <header class="physics-heading">
       <h2 id="physics-title">Quick Physics</h2>
       <p>Fracture a mesh and simulate how the pieces fall.</p>
     </header>
-    <fieldset class="control-gallery">
-      <legend class="break-visually-hidden">Physics examples</legend>
-      <input class="break-visually-hidden" type="radio" name="physics-example" id="physics-fracture" aria-controls="physics-fracture-panel" checked>
-      <input class="break-visually-hidden" type="radio" name="physics-example" id="physics-rigid" aria-controls="physics-rigid-panel">
-      <figure class="control-page" id="physics-fracture-panel">
-        <div class="control-media" aria-hidden="true"></div>
-        <figcaption><strong>Restore the missing volume and split it into fragments.</strong></figcaption>
+    <div class="physics-demos">
+      <figure class="gif-example physics-demo-wide">
+        <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/PHYSICS_WORKFLOW.jpg" width="2000" height="500" loading="lazy" decoding="async"
+          alt="The statue in three stages: destroy the mesh, fill the damage, then fracture and simulate the pieces.">
       </figure>
-      <figure class="control-page" id="physics-rigid-panel">
-        <div class="control-media" aria-hidden="true"></div>
-        <figcaption><strong>Set when fragments activate to create a chain reaction.</strong></figcaption>
+      <figure class="gif-example">
+        <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/GlassChainReaction-ezgif.com-optimize.gif" width="1000" height="500" loading="lazy" decoding="async"
+          alt="A ball strikes a window and triggers a chain reaction across the glass.">
+        <figcaption>Glass Chain Reaction</figcaption>
       </figure>
-      <label class="control-choice" for="physics-fracture">Custom Cell Fracture</label>
-      <label class="control-choice" for="physics-rigid">Rigid-body physics</label>
-    </fieldset>
+      <figure class="gif-example">
+        <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/CEllFrractureColumn-ezgif.com-optimize.gif" width="1000" height="500" loading="lazy" decoding="async"
+          alt="Fragments break away from a concrete column and scatter across the floor.">
+        <figcaption>Cell Fracture Column</figcaption>
+      </figure>
+      <figure class="gif-example physics-demo-wide">
+        <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/Anubis%20Chain%20Reaction.gif" width="1000" height="300" loading="lazy" decoding="async"
+          alt="Fragments break away from an Anubis statue and fall onto its base.">
+        <figcaption>Use Fill Damage to restore the missing volume before fracturing and simulating the pieces.</figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="section wrap" id="control" aria-labelledby="control-title">
@@ -918,20 +920,27 @@
         <p class="lead">Start with a preset, then make it yours. Keep the source editable while you explore the generated result.</p>
       </div>
       <fieldset class="control-gallery">
-        <legend class="break-visually-hidden">Damage placement examples</legend>
-        <input class="break-visually-hidden" type="radio" name="control-page" id="control-overview" aria-controls="control-overview-panel" checked>
-        <input class="break-visually-hidden" type="radio" name="control-page" id="control-demos" aria-controls="control-demos-panel">
-        <div class="control-page control-placeholder" id="control-overview-panel">
+        <legend class="break-visually-hidden">Drawing demos</legend>
+        <input class="break-visually-hidden" type="radio" name="control-page" id="drawing-structure" aria-controls="drawing-structure-panel" checked>
+        <input class="break-visually-hidden" type="radio" name="control-page" id="drawing-surface" aria-controls="drawing-surface-panel">
+        <div class="control-page" id="drawing-structure-panel">
           <figure class="control-example">
-            <div class="control-media" aria-hidden="true"></div>
-            <figcaption><strong>Localized damage</strong></figcaption>
+            <div class="control-media" role="img" aria-label="Drawn openings in a wall reveal the pipes inside."
+              style="--demo-gif: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/pipes_draw_optimized.gif')"></div>
+            <figcaption><strong>Pipes Draw</strong><span>Draw where pipes show through the wall.</span></figcaption>
           </figure>
           <figure class="control-example">
-            <div class="control-media" aria-hidden="true"></div>
-            <figcaption><strong>Exposed internal structure</strong></figcaption>
+            <div class="control-media" role="img" aria-label="Drawn shapes in the wall expose the planks beneath the surface."
+              style="--demo-gif: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/planks_draw_optimized.gif')"></div>
+            <figcaption><strong>Planks Draw</strong><span>Expose planks along a drawn shape.</span></figcaption>
           </figure>
         </div>
-        <div class="control-page control-examples" id="control-demos-panel">
+        <div class="control-page" id="drawing-surface-panel">
+          <figure class="control-example">
+            <div class="control-media" role="img" aria-label="Drawn patches remove concrete to expose the rebar underneath."
+              style="--demo-gif: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/concrete_draw_optimized.gif')"></div>
+            <figcaption><strong>Concrete Draw</strong><span>Draw a break to expose the rebar.</span></figcaption>
+          </figure>
           <figure class="control-example">
             <div class="control-media" role="img" aria-label="Strokes on the green surface define the areas that peel away."
               style="--demo-gif: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/Peeling_draw_optimized.gif')"></div>
@@ -943,10 +952,15 @@
             <figcaption><strong>Glass Draw</strong><span>Draw where the window cracks and breaks.</span></figcaption>
           </figure>
         </div>
-        <label class="control-choice" for="control-overview">Overview</label>
-        <label class="control-choice" for="control-demos">Drawing demos</label>
+        <label class="control-choice" for="drawing-structure">Pipes &amp; Planks</label>
+        <label class="control-choice" for="drawing-surface">Surface Damage</label>
       </fieldset>
     </div>
+    <figure class="gif-example control-statue">
+      <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/statueboolbreak-ezgif.com-optimize.gif" width="1000" height="500" loading="lazy" decoding="async"
+        alt="A boolean cutter opens different parts of the statue, revealing its internal reinforcement.">
+      <figcaption>Statue Bool and Break</figcaption>
+    </figure>
   </section>
 
   <section class="preset-section wrap" aria-labelledby="presets-title">
