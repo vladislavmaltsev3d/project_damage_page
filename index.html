@@ -16,6 +16,7 @@
     .effect-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 18px}
     .effect-card{min-width:0}
     .effect-image{position:relative;overflow:hidden;background:var(--light)}
+    .effect-image img{display:block;width:100%;height:auto}
     .effect-card figcaption{display:flex;justify-content:space-between;gap:8px;font-size:15px;letter-spacing:-.025em;padding:14px 0;border-bottom:1px solid var(--line)}
     .effect-card figcaption span{color:var(--muted);font:10px/1.4 var(--mono)}
     .all-effects{margin-top:clamp(24px,4vw,40px)}
@@ -873,11 +874,31 @@
   <section class="section library wrap" id="effects" aria-labelledby="effects-title">
     <div class="intro"><h2 id="effects-title">One toolkit.<br>Many ways to break.</h2><p class="lead">Go from subtle wear to exposed interiors. Combine generators, select an effect in the hierarchy and refine its geometry, placement and materials.</p></div>
     <div class="effect-grid">
-      <figure class="effect-card"><div class="effect-image"><div class="image-placeholder" aria-hidden="true"></div></div><figcaption>Edges &amp; corners <span>Wear</span></figcaption></figure>
-      <figure class="effect-card"><div class="effect-image"><div class="image-placeholder" aria-hidden="true"></div></div><figcaption>Cracks &amp; fractures <span>Split</span></figcaption></figure>
-      <figure class="effect-card"><div class="effect-image"><div class="image-placeholder" aria-hidden="true"></div></div><figcaption>Boolean damage <span>Cut</span></figcaption></figure>
+      <figure class="effect-card">
+        <div class="effect-image">
+          <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/concrete.jpg" width="2000" height="1000" loading="lazy" decoding="async" alt="Chips along the top edge and corner of a concrete wall.">
+        </div>
+        <figcaption>Edges &amp; corners <span>Wear</span></figcaption>
+      </figure>
+      <figure class="effect-card">
+        <div class="effect-image">
+          <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/fractures.jpg" width="2000" height="1000" loading="lazy" decoding="async" alt="Branching cracks cross a sunlit concrete surface.">
+        </div>
+        <figcaption>Cracks &amp; fractures <span>Split</span></figcaption>
+      </figure>
+      <figure class="effect-card">
+        <div class="effect-image">
+          <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/bool.jpg" width="2000" height="1000" loading="lazy" decoding="async" alt="A cut through a statue exposes the reinforcement inside.">
+        </div>
+        <figcaption>Boolean damage <span>Cut</span></figcaption>
+      </figure>
       <figure class="effect-card"><div class="effect-image"><div class="image-placeholder" aria-hidden="true"></div></div><figcaption>Metal tears &amp; impacts <span>Tear</span></figcaption></figure>
-      <figure class="effect-card"><div class="effect-image"><div class="image-placeholder" aria-hidden="true"></div></div><figcaption>Timber &amp; internal layers <span>Reveal</span></figcaption></figure>
+      <figure class="effect-card">
+        <div class="effect-image">
+          <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/wallpaper.png" width="2000" height="1000" loading="lazy" decoding="async" alt="A strip of patterned wallpaper curls away from the wall.">
+        </div>
+        <figcaption>Wallpaper <span>Peel</span></figcaption>
+      </figure>
       <figure class="effect-card"><div class="effect-image"><div class="image-placeholder" aria-hidden="true"></div></div><figcaption>Surface erosion <span>Weather</span></figcaption></figure>
     </div>
     <details class="all-effects">
