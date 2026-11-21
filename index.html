@@ -380,13 +380,16 @@
       --zoom-width: calc(5 * var(--preview-width));
       --zoom-height: calc(var(--zoom-width) * 1.25);
       display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-      grid-template-areas: "media copy" "media zoom"; grid-template-rows: auto 1fr;
-      gap: clamp(16px, 2.5vw, 30px) var(--sequence-gap); align-items: start;
+      grid-template-areas: "media copy" "media actions" "media reset" "media zoom";
+      grid-template-rows: auto auto auto 1fr;
+      column-gap: var(--sequence-gap); align-items: start;
     }
-    .sequence-frame { display: none; }
+    /* All steps size the same text and button rows. Only the active step paints its media. */
+    .sequence-frame { display: contents; visibility: hidden; --sequence-media-display: none; }
     .sequence-card:not([data-selected]):not(:has(> .sequence-target:target)) > .sequence-first,
     .sequence-card:not([data-selected]) > .sequence-target:target + .sequence-frame,
-    .sequence-frame[data-active] { display: contents; }
+    .sequence-frame[data-active] { visibility: visible; --sequence-media-display: block; }
+    .sequence-preview, .sequence-zoom { display: var(--sequence-media-display); }
     .sequence-preview, .sequence-lens {
       grid-area: media; position: relative; width: min(100%, 470px);
       aspect-ratio: 4 / 5; justify-self: center; overflow: hidden;
@@ -403,7 +406,7 @@
     }
     .sequence-copy { grid-area: copy; min-width: 0; padding-top: clamp(12px, 3vw, 42px); }
     .sequence-zoom {
-      grid-area: zoom; position: relative; width: min(100%, 390px); aspect-ratio: 1; overflow: hidden;
+      grid-area: zoom; margin-top: clamp(16px, 2.5vw, 30px); position: relative; width: min(100%, 390px); aspect-ratio: 1; overflow: hidden;
     }
     .sequence-lens { z-index: 1; }
     .sequence-lens summary {
@@ -471,7 +474,8 @@
     }
     .sequence-copy h3 { font-size: clamp(28px, 3.8vw, 48px); line-height: 1.1; letter-spacing: .022em; }
     .sequence-description { max-width: 36ch; margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--muted); }
-    .sequence-buttons { display: grid; gap: 8px; max-width: 310px; margin-top: clamp(16px, 2.5vw, 30px); }
+    .sequence-buttons { display: contents; }
+    .sequence-action-row, .sequence-buttons .sequence-reset { width: min(100%, 310px); }
     .sequence-buttons a {
       display: flex;
       align-items: center;
@@ -487,30 +491,31 @@
       text-align: left;
     }
     .sequence-buttons a:hover { background: #ff794c; }
-    .sequence-action-row { display: flex; gap: 8px; }
-    .sequence-next, .sequence-alternate { flex: 1; }
+    .sequence-action-row {
+      grid-area: actions; align-self: stretch; margin-top: clamp(16px, 2.5vw, 30px);
+      display: grid; grid-template-columns: minmax(0, 1fr) 4.25rem; gap: 8px;
+    }
     .sequence-buttons .sequence-revert {
-      flex: 0 0 auto;
-      padding-inline: 13px;
+      justify-content: center; padding-inline: 6px;
       background: transparent;
       border-color: var(--line);
       font-size: 12px;
     }
     .sequence-buttons .sequence-revert:hover { background: var(--light); }
-    .sequence-buttons .sequence-reset { background: transparent; }
+    .sequence-buttons .sequence-reset { grid-area: reset; margin-top: 8px; background: transparent; }
     .sequence-buttons .sequence-reset:hover { background: var(--paper); }
     @media (max-width: 620px) {
       .sequence-card {
         --preview-width: min(100cqw, 470px);
-        grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; grid-template-areas: "media" "copy";
+        grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(4, auto); grid-template-areas: "media" "copy" "actions" "reset";
       }
       .sequence-zoom { display: none; }
       .sequence-card:has(.sequence-lens[open]) .sequence-preview::after { content: ""; background-color: var(--paper); }
       @media (any-hover: hover) {
         .sequence-card:has(.sequence-lens summary:hover) .sequence-preview::after { content: ""; background-color: var(--paper); }
       }
-      .sequence-copy { padding-top: 0; }
-      .sequence-buttons { max-width: none; }
+      .sequence-copy { padding-top: clamp(16px, 2.5vw, 30px); }
+      .sequence-action-row, .sequence-buttons .sequence-reset { width: 100%; }
     }
 
     .benchmark{border-block:1px solid var(--ink)}
@@ -591,7 +596,7 @@
               style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/0_Statue.png')"></div>
             <div class="break-switch">
               <a class="break-button" href="#stature-hit-1" aria-controls="break-stature">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Stature</strong><span>Intact statue</span></figcaption>
@@ -609,7 +614,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#stature-hit-2" aria-controls="break-stature">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Stature</strong><span>Surface wear</span></figcaption>
@@ -629,7 +634,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#stature-hit-3" aria-controls="break-stature">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Stature</strong><span>Fractures</span></figcaption>
@@ -648,7 +653,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#stature-hit-4" aria-controls="break-stature">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Stature</strong><span>Surface erosion</span></figcaption>
@@ -665,7 +670,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#stature-hit-5" aria-controls="break-stature">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Stature</strong><span>Face damage</span></figcaption>
@@ -683,7 +688,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#stature-hit-7" aria-controls="break-stature">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Stature</strong><span>Exposed rebar</span></figcaption>
@@ -722,7 +727,7 @@
               style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/glass%20break%200r.jpg')"></div>
             <div class="break-switch">
               <a class="break-button" href="#glass-hit-1" aria-controls="break-glass">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Glass fracture</strong><span>Intact panes</span></figcaption>
@@ -738,7 +743,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#glass-hit-2" aria-controls="break-glass">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Glass fracture</strong><span>Branching cracks</span></figcaption>
@@ -754,7 +759,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#glass-hit-3" aria-controls="break-glass">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Glass fracture</strong><span>Fine cracks</span></figcaption>
@@ -771,7 +776,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#glass-hit-4" aria-controls="break-glass">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Glass fracture</strong><span>Partial break</span></figcaption>
@@ -803,7 +808,7 @@
               style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/metal0.png')"></div>
             <div class="break-switch">
               <a class="break-button" href="#metal-hit-1" aria-controls="break-metal">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Metal</strong><span>Intact metal</span></figcaption>
@@ -824,7 +829,7 @@
             </div>
             <div class="break-switch">
               <a class="break-button" href="#metal-hit-3" aria-controls="break-metal">
-                <span class="break-button-face">Break It</span>
+                <span class="break-button-face">Break It!</span>
               </a>
             </div>
             <figcaption><strong>Metal</strong><span>Dented surfaces</span></figcaption>
@@ -1040,9 +1045,9 @@
           <p class="sequence-step">Starting mesh</p>
           <h3>Plain concrete</h3>
           <p class="sequence-description">Start with a plain concrete wall. Add effects one at a time to see how they build on each other.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-1">Add New Effect <span aria-hidden="true">+</span></a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-1">Add New Effect <span aria-hidden="true">+</span></a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1053,9 +1058,9 @@
           <p class="sequence-step">Effect 1 of 8</p>
           <h3>Edge damage</h3>
           <p class="sequence-description">Chip the sharp edges and break up the rim at the base of the wall.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-2">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-0">Revert</a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-2">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-0">Revert</a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1066,9 +1071,9 @@
           <p class="sequence-step">Effect 2 of 8</p>
           <h3>Surface wear</h3>
           <p class="sequence-description">Add subtle irregularities across the concrete face.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-3">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-1">Revert</a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-3">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-1">Revert</a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1079,9 +1084,9 @@
           <p class="sequence-step">Effect 3 of 8</p>
           <h3>Fracture</h3>
           <p class="sequence-description">Run long cracks down the slab and across its base.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-4">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-2">Revert</a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-4">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-2">Revert</a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1092,9 +1097,9 @@
           <p class="sequence-step">Effect 4 of 8</p>
           <h3>Bullet Hit</h3>
           <p class="sequence-description">Add bullet impact marks across the concrete, with chipped edges around each hit.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-5">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-3">Revert</a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-5">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-3">Revert</a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1105,9 +1110,9 @@
           <p class="sequence-step">Effect 5 of 8</p>
           <h3>Break and expose rebar</h3>
           <p class="sequence-description">Cut away part of the concrete to expose the rebar. Project Damage automatically generates the reinforcement as procedural geometry inside the mesh.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-6">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-4">Revert</a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-6">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-4">Revert</a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1118,9 +1123,9 @@
           <p class="sequence-step">Effect 6 of 8</p>
           <h3>Fracture around the break</h3>
           <p class="sequence-description">Add branching cracks around the opening and tie it into the damage across the wall.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-7">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-5">Revert</a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-7">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-5">Revert</a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1131,9 +1136,9 @@
           <p class="sequence-step">Effect 7 of 8</p>
           <h3>Ivy growth</h3>
           <p class="sequence-description">Add ivy that climbs the wall and spreads across the base.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-8">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-6">Revert</a></div>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-next" href="#pd-layer-8">Add New Effect <span aria-hidden="true">+</span></a><a class="sequence-revert" href="#pd-layer-6">Revert</a></div>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1144,10 +1149,10 @@
           <p class="sequence-step">Effect 8 of 8</p>
           <h3>Adaptive Displace</h3>
           <p class="sequence-description">Add fine surface relief with high-quality displacement, adaptive subdivision, and Pin Groups support.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-alternate" href="#pd-layer-9">Alternate Look Next <span aria-hidden="true">→</span></a><a class="sequence-revert" href="#pd-layer-7">Revert</a></div>
-            <a class="sequence-reset" href="#pd-layer-0">Go to Beginning <span aria-hidden="true">↺</span></a>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-alternate" href="#pd-layer-9">Alternate Look Next <span aria-hidden="true">→</span></a><a class="sequence-revert" href="#pd-layer-7">Revert</a></div>
+          <a class="sequence-reset" href="#pd-layer-0">Go to Beginning <span aria-hidden="true">↺</span></a>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1158,10 +1163,10 @@
           <p class="sequence-step">Alternate look 1 of 2</p>
           <h3>Tall exposed rebar</h3>
           <p class="sequence-description">Take away the upper section and leave long, bent bars exposed above the concrete.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-alternate" href="#pd-layer-10">Alternate Look Next <span aria-hidden="true">→</span></a><a class="sequence-revert" href="#pd-layer-8">Revert</a></div>
-            <a class="sequence-reset" href="#pd-layer-0">Go to Beginning <span aria-hidden="true">↺</span></a>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-alternate" href="#pd-layer-10">Alternate Look Next <span aria-hidden="true">→</span></a><a class="sequence-revert" href="#pd-layer-8">Revert</a></div>
+          <a class="sequence-reset" href="#pd-layer-0">Go to Beginning <span aria-hidden="true">↺</span></a>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
@@ -1172,10 +1177,10 @@
           <p class="sequence-step">Alternate look 2 of 2</p>
           <h3>Short exposed rebar</h3>
           <p class="sequence-description">Try a shorter, uneven break with less steel projecting above the wall.</p>
-          <div class="sequence-buttons">
-            <div class="sequence-action-row"><a class="sequence-alternate" href="#pd-layer-8">Alternate Look Next <span aria-hidden="true">→</span></a><a class="sequence-revert" href="#pd-layer-9">Revert</a></div>
-            <a class="sequence-reset" href="#pd-layer-0">Go to Beginning <span aria-hidden="true">↺</span></a>
-          </div>
+        </div>
+        <div class="sequence-buttons">
+          <div class="sequence-action-row"><a class="sequence-alternate" href="#pd-layer-8">Alternate Look Next <span aria-hidden="true">→</span></a><a class="sequence-revert" href="#pd-layer-9">Revert</a></div>
+          <a class="sequence-reset" href="#pd-layer-0">Go to Beginning <span aria-hidden="true">↺</span></a>
         </div>
         <div class="sequence-zoom" aria-hidden="true"></div>
       </div>
