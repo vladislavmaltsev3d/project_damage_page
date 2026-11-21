@@ -25,6 +25,17 @@
     .all-effects[open]>summary::after{content:"−"}
     .all-effects-panel{background:#dedfda}
     .all-effects-panel img{display:block;width:100%;height:auto}
+    .physics-box {
+      margin: 0 clamp(20px, 4vw, 48px) clamp(32px, 5vw, 64px);
+      border: 1px solid var(--ink);
+    }
+    .physics-heading {
+      display: flex; flex-wrap: wrap; align-items: baseline;
+      gap: 8px clamp(22px, 3vw, 42px); padding: clamp(16px, 2.5vw, 30px);
+    }
+    .physics-heading h2 { font-size: clamp(36px, 6vw, 76px); line-height: 1.04; }
+    .physics-heading p { font-size: clamp(14px, 1.5vw, 17px); line-height: 1.45; color: var(--muted); }
+    .physics-box .control-gallery { border: 0; border-top: 1px solid var(--ink); }
     #control { padding-block: clamp(28px, 4.6vw, 56px); }
     .control-layout {
       display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
@@ -39,6 +50,8 @@
       border: 1px solid var(--ink); background: var(--light);
     }
     .control-page { display: none; grid-area: 1 / 1 / 2 / -1; min-width: 0; }
+    #physics-fracture:checked ~ #physics-fracture-panel,
+    #physics-rigid:checked ~ #physics-rigid-panel,
     #control-overview:checked ~ .control-placeholder,
     #control-demos:checked ~ .control-examples { display: block; }
     .control-example + .control-example { border-top: 1px solid var(--ink); }
@@ -58,8 +71,12 @@
     }
     .control-choice:last-child { border-left: 1px solid var(--ink); }
     .control-choice:hover { background: var(--paper); }
+    #physics-fracture:checked ~ [for="physics-fracture"],
+    #physics-rigid:checked ~ [for="physics-rigid"],
     #control-overview:checked ~ [for="control-overview"],
     #control-demos:checked ~ [for="control-demos"] { color: var(--paper); background: var(--ink); }
+    #physics-fracture:focus-visible ~ [for="physics-fracture"],
+    #physics-rigid:focus-visible ~ [for="physics-rigid"],
     #control-overview:focus-visible ~ [for="control-overview"],
     #control-demos:focus-visible ~ [for="control-demos"] { outline: 3px solid var(--orange); outline-offset: -4px; }
     @media (max-width: 700px) {
@@ -870,6 +887,28 @@
         >
       </div>
     </details>
+  </section>
+
+  <section class="physics-box" id="physics" aria-labelledby="physics-title">
+    <header class="physics-heading">
+      <h2 id="physics-title">Quick Physics</h2>
+      <p>Fracture a mesh and simulate how the pieces fall.</p>
+    </header>
+    <fieldset class="control-gallery">
+      <legend class="break-visually-hidden">Physics examples</legend>
+      <input class="break-visually-hidden" type="radio" name="physics-example" id="physics-fracture" aria-controls="physics-fracture-panel" checked>
+      <input class="break-visually-hidden" type="radio" name="physics-example" id="physics-rigid" aria-controls="physics-rigid-panel">
+      <figure class="control-page" id="physics-fracture-panel">
+        <div class="control-media" aria-hidden="true"></div>
+        <figcaption><strong>Restore the missing volume and split it into fragments.</strong></figcaption>
+      </figure>
+      <figure class="control-page" id="physics-rigid-panel">
+        <div class="control-media" aria-hidden="true"></div>
+        <figcaption><strong>Set when fragments activate to create a chain reaction.</strong></figcaption>
+      </figure>
+      <label class="control-choice" for="physics-fracture">Custom Cell Fracture</label>
+      <label class="control-choice" for="physics-rigid">Rigid-body physics</label>
+    </fieldset>
   </section>
 
   <section class="section wrap" id="control" aria-labelledby="control-title">
