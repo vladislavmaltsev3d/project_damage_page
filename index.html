@@ -61,7 +61,7 @@
     .demo-heading h2 { font-size: clamp(36px, 6vw, 76px); line-height: 1.04; }
     .demo-heading p { font-size: clamp(14px, 1.5vw, 17px); line-height: 1.45; color: var(--muted); }
     #physics .demo-heading { anchor-name: --pd-physics-heading; }
-    .physics-support-intro { display: flex; flex: 1 1 295px; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+
     .physics-support-button {
       display: inline-flex; align-items: center; justify-content: space-between; gap: 12px;
       min-height: 44px; padding: 8px 14px; border: 1px solid var(--ink);
@@ -183,7 +183,7 @@
     .break-it > h2 { margin-bottom: clamp(20px, 3vw, 36px); }
     .break-demo {
       position: relative;
-      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
       margin: 0; padding: 0; border: 0; min-width: 0;
     }
     .break-visually-hidden, .sequence-announcement {
@@ -206,9 +206,9 @@
       margin-inline: calc(-1 * var(--break-gutter)); margin-top: clamp(16px, 2.8vw, 32px);
     }
     #break-tab-stature:checked ~ #break-stature,
+    #break-tab-stature:checked ~ #break-wall,
     #break-tab-glass:checked ~ #break-glass,
-    #break-tab-metal:checked ~ #break-metal,
-    #break-tab-wall:checked ~ #break-wall { display: grid; }
+    #break-tab-glass:checked ~ #break-metal { display: grid; }
     .break-preview {
       grid-area: media; justify-self: center; position: relative; isolation: isolate;
       width: 100%; aspect-ratio: 2 / 1;
@@ -432,8 +432,11 @@
     }
     .sequence-copy { grid-area: copy; min-width: 0; padding-top: clamp(12px, 3vw, 42px); }
     .sequence-zoom {
-      grid-area: zoom; margin-top: clamp(16px, 2.5vw, 30px); position: relative; width: min(100%, 390px); aspect-ratio: 1; overflow: hidden;
+      grid-area: zoom; align-self: stretch; min-height: 0; margin-top: 12px;
+      position: relative; width: min(100%, 390px); overflow: hidden;
     }
+    /* Reclaim the reset row for the magnifier on steps without a reset link. */
+    .sequence-frame:not(:has(.sequence-reset)) .sequence-zoom { grid-row: 3 / 5; }
     .sequence-lens { z-index: 1; }
     .sequence-lens summary {
       display: grid; grid-template-rows: repeat(11, 1fr); height: 100%; list-style: none;
@@ -530,7 +533,7 @@
     .sequence-buttons .sequence-revert:hover { background: var(--light); }
     .sequence-buttons .sequence-reset { grid-area: reset; margin-top: 8px; background: transparent; }
     .sequence-buttons .sequence-reset:hover { background: var(--paper); }
-    @media (max-width: 620px) {
+    @media (max-width: 720px) {
       .sequence-card {
         --preview-width: min(100cqw, 470px);
         grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(4, auto); grid-template-areas: "media" "copy" "actions" "reset";
@@ -622,6 +625,24 @@
     @media (prefers-reduced-motion: reduce) {
       .preset-preview input, .preset-preview label { display: none; }
     }
+    #overview, #effects { container-type: inline-size; }
+    #overview .intro, #effects .intro, #control .demo-heading {
+      display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px;
+      margin-bottom: clamp(18px, 2.5vw, 30px);
+    }
+    #overview-title, #effects-title { font-size: clamp(32px, 6.5cqw, 76px); line-height: 1.06; }
+    #overview .intro .lead, #effects .intro .lead { max-width: none; }
+    #physics .demo-heading {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "title button" "description description"; align-items: center; gap: 9px 18px;
+    }
+    #physics-title { grid-area: title; }
+    #physics .demo-heading p { grid-area: description; }
+    .physics-support-button { grid-area: button; justify-self: end; }
+    @media (max-width: 550px) {
+      #physics .demo-heading { grid-template-columns: 1fr; grid-template-areas: "title" "description" "button"; }
+      .physics-support-button { justify-self: start; }
+    }
   </style>
 </head>
 <body>
@@ -654,14 +675,10 @@
     <h2 id="break-it-title">Break It!</h2>
     <fieldset class="break-demo">
       <legend class="break-visually-hidden">Break It presets</legend>
-      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-stature" aria-controls="break-stature" checked>
-      <label class="break-tab" for="break-tab-stature">Stature</label>
-      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-wall" aria-controls="break-wall">
-      <label class="break-tab" for="break-tab-wall">Wall</label>
-      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-glass" aria-controls="break-glass">
-      <label class="break-tab" for="break-tab-glass">Glass</label>
-      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-metal" aria-controls="break-metal">
-      <label class="break-tab" for="break-tab-metal">Metal</label>
+      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-stature" aria-controls="break-stature break-wall" checked>
+      <label class="break-tab" for="break-tab-stature">Stage &amp; Wall</label>
+      <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-glass" aria-controls="break-glass break-metal">
+      <label class="break-tab" for="break-tab-glass">Glass &amp; Metal</label>
       <div class="break-panel" id="break-stature" data-break-sequence>
         <span class="break-visually-hidden break-status" role="status" aria-atomic="true"></span>
         <span class="break-target" id="stature-hit-0" hidden></span>
@@ -674,7 +691,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stature</strong><span>Intact statue</span></figcaption>
+            <figcaption><strong>Stage</strong><span>Intact statue</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-1" hidden></span>
@@ -692,7 +709,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stature</strong><span>Surface wear</span></figcaption>
+            <figcaption><strong>Stage</strong><span>Surface wear</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-2" hidden></span>
@@ -712,7 +729,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stature</strong><span>Fractures</span></figcaption>
+            <figcaption><strong>Stage</strong><span>Fractures</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-3" hidden></span>
@@ -731,7 +748,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stature</strong><span>Surface erosion</span></figcaption>
+            <figcaption><strong>Stage</strong><span>Surface erosion</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-4" hidden></span>
@@ -748,7 +765,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stature</strong><span>Face damage</span></figcaption>
+            <figcaption><strong>Stage</strong><span>Face damage</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-5" hidden></span>
@@ -766,7 +783,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stature</strong><span>Exposed rebar</span></figcaption>
+            <figcaption><strong>Stage</strong><span>Exposed rebar</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-7" hidden></span>
@@ -785,7 +802,7 @@
                 <span class="break-button-face">Reset preview</span>
               </a>
             </div>
-            <figcaption><strong>Stature</strong><span>Final break</span></figcaption>
+            <figcaption><strong>Stage</strong><span>Final break</span></figcaption>
           </figure>
         </div>
       </div>
@@ -1056,7 +1073,7 @@
   </section>
 
   <section class="section wrap" id="overview" aria-labelledby="overview-title">
-    <div class="intro"><h2 id="overview-title">Less perfect.<br>More believable.</h2><p class="lead muted">A chipped edge. A split board. The structure behind a broken wall. Build the details that make a scene feel like something happened here.</p></div>
+    <div class="intro"><h2 id="overview-title">Less perfect. More believable.</h2><p class="lead muted">A chipped edge. A split board. The structure behind a broken wall. Build the details that make a scene feel like something happened here.</p></div>
     <figure class="wall-compare" id="wall-compare">
       <div class="compare-view">
         <div class="compare-scroll" tabindex="0" role="region" aria-label="Scroll horizontally to compare the concrete pipe before and after damage">
@@ -1077,7 +1094,7 @@
   </section>
 
   <section class="section library wrap" id="effects" aria-labelledby="effects-title">
-    <div class="intro"><h2 id="effects-title">One toolkit.<br>Many ways to break.</h2><p class="lead">Go from subtle wear to exposed interiors. Combine generators, select an effect in the hierarchy and refine its geometry, placement and materials.</p></div>
+    <div class="intro"><h2 id="effects-title">One toolkit. Many ways to break.</h2><p class="lead">Go from subtle wear to exposed interiors. Combine generators, select an effect in the hierarchy and refine its geometry, placement and materials.</p></div>
     <div class="effect-grid">
       <figure class="effect-card">
         <div class="effect-image">
@@ -1171,12 +1188,10 @@
   <section class="section physics-section wrap" id="physics" aria-labelledby="physics-title">
     <header class="demo-heading">
       <h2 id="physics-title">Quick Physics</h2>
-      <div class="physics-support-intro">
         <p>Fracture a mesh and simulate how the pieces fall.</p>
         <button type="button" class="physics-support-button" popovertarget="pd-physics-support" aria-haspopup="dialog">
           Physics Support List <span aria-hidden="true">+</span>
         </button>
-      </div>
     </header>
     <div class="physics-support-panel" id="pd-physics-support" popover="auto" role="dialog" aria-labelledby="pd-physics-support-title">
       <div class="physics-support-head">
@@ -1586,7 +1601,7 @@
   });
 
   document.querySelectorAll('[data-break-sequence]').forEach(function (panel) {
-    const tab = document.querySelector('input[aria-controls="' + panel.id + '"]');
+    const tab = document.querySelector('input[aria-controls~="' + panel.id + '"]');
     const status = panel.querySelector('.break-status');
     let upcoming;
 
