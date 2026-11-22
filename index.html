@@ -585,14 +585,25 @@
     .preset-label { margin-top: 9px; font: 11px/1.4 var(--mono); text-transform: uppercase; }
     #presets-title { grid-area: title; align-self: center; font-size: clamp(30px, 5.5vw, 68px); line-height: 1.04; }
     .preset-description { grid-area: description; align-self: end; font-size: clamp(14px, 1.65vw, 21px); line-height: 1.45; }
-    .preset-preview { grid-area: preview; align-self: start; position: relative; width: 100%; max-width: 512px; }
-    .preset-frames { display: grid; aspect-ratio: 1; background: var(--ink); overflow: hidden; }
+    .preset-preview {
+      --rim: clamp(5px, .65vw, 8px);
+      --corner-plate: var(--ink) 12px, transparent 12.5px;
+      grid-area: preview; align-self: start; position: relative; width: 100%; max-width: 512px;
+      border: 1px solid var(--ink); padding: var(--rim);
+      background:
+        linear-gradient(135deg, var(--corner-plate)) top left / 20px 20px no-repeat,
+        linear-gradient(225deg, var(--corner-plate)) top right / 20px 20px no-repeat,
+        linear-gradient(45deg, var(--corner-plate)) bottom left / 20px 20px no-repeat,
+        linear-gradient(315deg, var(--corner-plate)) bottom right / 20px 20px no-repeat,
+        repeating-linear-gradient(-55deg, var(--ink) 0 3px, transparent 3px 7px) top center / 46px var(--rim) no-repeat;
+    }
+    .preset-frames { display: grid; aspect-ratio: 1; background: var(--ink); outline: 1px solid var(--ink); overflow: hidden; }
     .preset-frames img { grid-area: 1 / 1; display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; }
     .preset-frames img ~ img { opacity: 0; animation: preset-frame 10s step-end infinite; }
     @keyframes preset-frame { 0% { opacity: 1; } 10%, 100% { opacity: 0; } }
     .preset-preview input { position: absolute; opacity: 0; width: 1px; height: 1px; }
     .preset-preview label {
-      position: absolute; right: 8px; bottom: 8px; z-index: 1; display: grid; place-items: center;
+      position: absolute; right: calc(var(--rim) + 8px); bottom: calc(var(--rim) + 8px); z-index: 1; display: grid; place-items: center;
       width: 40px; height: 40px; background: var(--ink); color: var(--light); cursor: pointer;
     }
     .preset-preview label::before { content: ""; width: 10px; height: 13px; border-inline: 3px solid; }
