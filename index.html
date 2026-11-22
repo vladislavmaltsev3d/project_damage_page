@@ -10,7 +10,34 @@
     :root{--paper:#dedfd9;--light:#ecece7;--ink:#151614;--muted:#65665f;--line:#b8bab1;--orange:#ff5a22;--mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;--sans:Arial,Helvetica,sans-serif}
     *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:transparent;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}button,a,summary{-webkit-tap-highlight-color:transparent}button{font:inherit}a{color:inherit;text-decoration:none}a,button,summary{touch-action:manipulation}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--orange);outline-offset:5px}button{cursor:pointer}.image-placeholder{display:block;width:100%;height:auto;aspect-ratio:2000 / 1000;background:var(--line)}h1,h2,h3,p,figure{margin:0}button,summary{-webkit-appearance:none}button{color:inherit}::selection{background:var(--orange);color:var(--ink)}[hidden]{display:none!important}
     .page{max-width:1240px;margin:0 auto;background:var(--paper);overflow:hidden}.wrap{padding-inline:clamp(20px,4vw,48px)}.section{padding-block:72px;border-top:1px solid var(--ink)}.arrow{font-family:Arial,sans-serif;font-weight:400}h2{font-size:clamp(40px,6.7vw,76px);font-weight:600;line-height: 1.12;letter-spacing: .022em}.lead{font-size:17px;line-height:1.55;letter-spacing:-.025em}.muted{color:var(--muted)}.text-link{display:inline-flex;align-items:center;justify-content:space-between;gap:36px;padding-block:15px;border-top:1px solid currentColor;font-size:13px;font-weight:600}.text-link .arrow{font-size:23px;transition:transform .2s}.text-link:hover .arrow{transform:translate(3px,-3px)}.spec-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}.spec{padding:24px 20px;border-right:1px solid var(--line)}.spec:last-child{border-right:0}.spec strong{display:block;font-size:21px;letter-spacing:-.04em;font-weight:500;margin-bottom:7px}.spec span{display:block;font:9px/1.4 var(--mono);text-transform:uppercase;color:var(--muted)}
-    .intro{display:grid;grid-template-columns:1.3fr 1fr;gap:60px;align-items:end;margin-bottom:42px}.intro .lead{max-width:350px;font-size:15px}.showcase{border:1px solid var(--ink)}.tabs{display:flex;border-bottom:1px solid var(--ink)}.tab{display:flex;flex:1;justify-content:space-between;gap:8px;background:transparent;border:0;border-right:1px solid var(--ink);padding:18px 20px;font:11px/1.4 var(--mono);text-transform:uppercase;transition:background .2s}.tab:last-child{border-right:0}.tab[aria-selected="true"]{background:var(--ink);color:var(--paper)}.tab:not([aria-selected="true"]):hover{background:var(--light)}.tab-panel{display:grid;grid-template-columns:1.13fr 1fr;min-width:0}.sample-media{display:grid;align-content:center;min-width:0;background:var(--light);border-right:1px solid var(--ink)}.sample-copy{padding:clamp(24px,3.5vw,44px);display:flex;flex-direction:column;justify-content:center;min-width:0}.sample-copy h3{font-size:clamp(29px,3.6vw,43px);line-height: 1.12;letter-spacing: .022em;font-weight:500;max-width:350px}.sample-copy p{font-size:14px;line-height:1.6;margin-top:20px;max-width:350px;color:var(--muted)}.tags{display:flex;gap:7px;flex-wrap:wrap;list-style:none;padding:0;margin:24px 0 0}.tags li{border:1px solid var(--line);padding:6px 8px;font:9px/1.4 var(--mono)}.showcase-caption{display:flex;justify-content:space-between;gap:20px;margin-top:13px;font:9px/1.5 var(--mono);color:var(--muted)}
+    .intro{display:grid;grid-template-columns:1.3fr 1fr;gap:60px;align-items:end;margin-bottom:42px}.intro .lead{max-width:350px;font-size:15px}
+    .wall-compare { --split: 50%; }
+    .compare-view { position: relative; isolation: isolate; border: 1px solid var(--ink); background: var(--line); }
+    .compare-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+    /* Scrolling moves the clipping edge while both images stay aligned. */
+    .compare-track { display: grid; width: 200%; }
+    .compare-layer { grid-area: 1 / 1; min-width: 0; }
+    .compare-layer img { position: sticky; left: 0; display: block; width: 50%; height: auto; }
+    .compare-before { clip-path: inset(0 50% 0 0); }
+    .wall-compare[data-slider] .compare-scroll { overflow: hidden; }
+    .wall-compare[data-slider] .compare-track, .wall-compare[data-slider] img { width: 100%; }
+    .wall-compare[data-slider] .compare-before { clip-path: inset(0 calc(100% - var(--split)) 0 0); }
+    .compare-range { position: absolute; inset: 0; z-index: 2; margin: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
+    .compare-view:has(.compare-range:focus-visible), .compare-scroll:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    .compare-divider { display: none; }
+    .wall-compare[data-slider] .compare-divider {
+      display: block; position: absolute; top: 0; bottom: 0; left: var(--split);
+      width: 2px; background: var(--orange); transform: translateX(-50%); pointer-events: none;
+    }
+    .wall-compare[data-slider] .compare-view::after {
+      content: "↔"; display: grid; place-items: center; position: absolute; top: 50%;
+      left: clamp(22px, var(--split), calc(100% - 22px)); transform: translate(-50%, -50%);
+      width: 40px; height: 40px; border: 1px solid var(--ink); border-radius: 50%;
+      background: var(--orange); color: var(--ink); font: 24px/1 Arial, sans-serif; pointer-events: none;
+    }
+    .wall-compare figcaption { display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; font: 12px/1.4 var(--mono); }
+    .compare-hint { color: var(--muted); }
+    .wall-compare[data-slider] .compare-hint { display: none; }
     .library{color:var(--ink)}
     .library .intro .lead{color:var(--muted)}
     .effect-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 18px}
@@ -99,11 +126,11 @@
     .limitations-intro{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:end;margin-bottom:38px}.limitations-intro .lead{font-size:14px;color:var(--muted);max-width:350px}.limitations-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px 44px}.limitation{border-top:1px solid var(--ink);padding-top:20px;min-width:0}.limitation-number{font:9px/1.5 var(--mono);color:var(--muted);display:block;margin-bottom:17px}.limitation h3{font-size:23px;font-weight:500;line-height:1.12;letter-spacing: .022em;margin-bottom:14px}.limitation p{font-size:13px;line-height:1.7;color:var(--muted);max-width:490px}.limitation p+p{margin-top:12px}.limitation strong{color:var(--ink);font-weight:600}.limitations-note{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;line-height:1.65;color:var(--muted);max-width:760px}.limitations-note::before{content:"";display:inline-block;width:7px;height:7px;background:var(--orange);margin-right:10px}.limitations-note strong{color:var(--ink);font-weight:500}
     @media(max-width:620px){.limitations-intro{grid-template-columns:1fr;gap:20px;margin-bottom:28px}.limitations-intro .lead{font-size:13px}.limitations-grid{grid-template-columns:1fr;gap:27px}.limitation{padding-top:18px}.limitation-number{margin-bottom:12px}.limitation h3{font-size:24px;margin-bottom:12px}.limitation p{font-size:12px}.limitations-note{font-size:11px;margin-top:27px}}
 
-    @media(max-width:900px){.spec{padding:19px 14px}.spec strong{font-size:18px}.intro{gap:35px}.section{padding-block:55px}.sample-copy{padding:25px}.preset-layout{gap:40px}.faq-layout{gap:35px}.closing{gap:25px}.contact-link{min-width:190px}}
-    @media(max-width:620px){.wrap{padding-inline:20px}.spec{padding:18px 20px}.spec strong{font-size:20px}.spec span{font-size:8px}.section{padding-block:43px}h2{font-size:43px}.intro{grid-template-columns:1fr;gap:20px;margin-bottom:27px}.intro .lead{font-size:13px;max-width:360px}.tabs .tab{padding:14px 9px;font-size:9px;justify-content:center}.tabs .tab span{display:none}.tab-panel{grid-template-columns:1fr}.sample-media{border-right:0;border-bottom:1px solid var(--ink)}.sample-copy{padding:25px}.sample-copy h3{font-size:35px}.sample-copy p{font-size:13px;margin-top:14px}.tags{margin-top:20px}.showcase-caption{font-size:8px;gap:15px}.showcase-caption span:first-child{max-width:230px}.effect-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.effect-card figcaption{font-size:12px;padding-block:11px}.effect-card figcaption span{display:none}.effect-categories{grid-template-columns:1fr 1fr;gap:25px 20px}.effect-categories p{font-size:11px}.effect-categories h3{font-size:9px}.all-effects{margin-top:28px}.all-effects>summary{font-size:13px}.preset-layout{grid-template-columns:1fr;gap:38px}.preset-section{padding-block:43px}.big-count{font-size:155px}.preset-label{margin-top:18px}.preset-copy h2{font-size:40px}.preset-copy>p{font-size:13px}.preset-counts{margin-top:22px}.preset-footnote{font-size:8px;margin-top:24px}.faq-layout{grid-template-columns:1fr;gap:28px}.faq-layout h2{font-size:43px}.faq summary{font-size:13px}.faq p{font-size:12px}.closing{grid-template-columns:1fr;padding-block:35px;gap:25px}.closing h2{font-size:43px}.closing p{font-size:12px}.contact-link{width:100%;padding:17px 20px;font-size:12px}.footer{align-items:flex-start;padding-block:20px;font-size:8px;gap:15px}.footer span:nth-child(2){max-width:120px}}
+    @media(max-width:900px){.spec{padding:19px 14px}.spec strong{font-size:18px}.intro{gap:35px}.section{padding-block:55px}.preset-layout{gap:40px}.faq-layout{gap:35px}.closing{gap:25px}.contact-link{min-width:190px}}
+    @media(max-width:620px){.wrap{padding-inline:20px}.spec{padding:18px 20px}.spec strong{font-size:20px}.spec span{font-size:8px}.section{padding-block:43px}h2{font-size:43px}.intro{grid-template-columns:1fr;gap:20px;margin-bottom:27px}.intro .lead{font-size:13px;max-width:360px}.effect-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.effect-card figcaption{font-size:12px;padding-block:11px}.effect-card figcaption span{display:none}.effect-categories{grid-template-columns:1fr 1fr;gap:25px 20px}.effect-categories p{font-size:11px}.effect-categories h3{font-size:9px}.all-effects{margin-top:28px}.all-effects>summary{font-size:13px}.preset-layout{grid-template-columns:1fr;gap:38px}.preset-section{padding-block:43px}.big-count{font-size:155px}.preset-label{margin-top:18px}.preset-copy h2{font-size:40px}.preset-copy>p{font-size:13px}.preset-counts{margin-top:22px}.preset-footnote{font-size:8px;margin-top:24px}.faq-layout{grid-template-columns:1fr;gap:28px}.faq-layout h2{font-size:43px}.faq summary{font-size:13px}.faq p{font-size:12px}.closing{grid-template-columns:1fr;padding-block:35px;gap:25px}.closing h2{font-size:43px}.closing p{font-size:12px}.contact-link{width:100%;padding:17px 20px;font-size:12px}.footer{align-items:flex-start;padding-block:20px;font-size:8px;gap:15px}.footer span:nth-child(2){max-width:120px}}
     @media(max-width:360px){.footer{font-size:7px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
-    @media print{body{background:var(--paper)}.page{max-width:none}.tabs,.contact-link{display:none}.tab-panel[hidden]{display:grid!important}.tab-panel{break-inside:avoid}.section{padding-block:35px}}
+    @media print{body{background:var(--paper)}.page{max-width:none}.contact-link{display:none}.wall-compare{break-inside:avoid}.section{padding-block:35px}}
 
     .hero { padding-block: clamp(20px, 3vw, 36px) clamp(24px, 4vw, 48px); }
     .hero-copy {
@@ -714,9 +741,129 @@
           </figure>
         </div>
       </div>
-      <div class="break-panel" id="break-wall">
-        <div class="break-preview break-placeholder" aria-hidden="true"></div>
-        <p class="break-placeholder-note">Wall preview coming soon.</p>
+      <div class="break-panel" id="break-wall" data-break-sequence>
+        <span class="break-visually-hidden break-status" role="status" aria-atomic="true"></span>
+        <span class="break-target" id="wall-hit-0" hidden></span>
+        <div class="break-stage break-start">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="An intact sunlit wall between two doorways."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/0_wall.png')"></div>
+            <div class="break-switch">
+              <a class="break-button" href="#wall-hit-1" aria-controls="break-wall">
+                <span class="break-button-face">Break It!</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Intact wall</span></figcaption>
+          </figure>
+        </div>
+        <span class="break-target" id="wall-hit-1" hidden></span>
+        <div class="break-stage">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="Fine cracks appear near the middle of the plaster wall."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/1_wall.png')">
+              <span class="break-dust" aria-hidden="true" style="left: 50%; top: 49%"><i class="chip-1"></i><i class="chip-2"></i><i class="chip-3"></i><i class="chip-4"></i><i class="chip-5"></i><i class="chip-6"></i><i class="chip-7"></i><i class="chip-8"></i><i class="chip-9"></i><i class="chip-10"></i><i class="chip-11"></i><i class="chip-12"></i><i class="chip-13"></i><i class="chip-14"></i><i class="chip-15"></i><i class="chip-16"></i><i class="chip-17"></i><i class="chip-18"></i><i class="chip-19"></i><i class="chip-20"></i><i class="chip-21"></i><i class="chip-22"></i><i class="chip-23"></i><i class="chip-24"></i></span>
+            </div>
+            <div class="break-switch">
+              <a class="break-button" href="#wall-hit-2" aria-controls="break-wall">
+                <span class="break-button-face">Break It!</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Hairline cracks</span></figcaption>
+          </figure>
+        </div>
+        <span class="break-target" id="wall-hit-2" hidden></span>
+        <div class="break-stage">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="A web of cracks spreads across the sunlit plaster."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/2_wall.png')">
+              <span class="break-dust" aria-hidden="true" style="left: 50%; top: 54%"><i class="chip-1"></i><i class="chip-2"></i><i class="chip-3"></i><i class="chip-4"></i><i class="chip-5"></i><i class="chip-6"></i><i class="chip-7"></i><i class="chip-8"></i><i class="chip-9"></i><i class="chip-10"></i><i class="chip-11"></i><i class="chip-12"></i><i class="chip-13"></i><i class="chip-14"></i><i class="chip-15"></i><i class="chip-16"></i><i class="chip-17"></i><i class="chip-18"></i><i class="chip-19"></i><i class="chip-20"></i><i class="chip-21"></i><i class="chip-22"></i><i class="chip-23"></i><i class="chip-24"></i></span>
+            </div>
+            <div class="break-switch">
+              <a class="break-button" href="#wall-hit-3" aria-controls="break-wall">
+                <span class="break-button-face">Break It!</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Impact cracks</span></figcaption>
+          </figure>
+        </div>
+        <span class="break-target" id="wall-hit-3" hidden></span>
+        <div class="break-stage">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="Patches of plaster chip away from the wall and its side columns."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/3_wall.png')">
+              <span class="break-dust" aria-hidden="true" style="left: 50%; top: 54%"><i class="chip-1"></i><i class="chip-3"></i><i class="chip-5"></i><i class="chip-7"></i><i class="chip-9"></i><i class="chip-11"></i><i class="chip-13"></i><i class="chip-15"></i><i class="chip-17"></i><i class="chip-19"></i><i class="chip-21"></i><i class="chip-23"></i></span>
+              <span class="break-dust" aria-hidden="true" style="left: 46%; top: 40%"><i class="chip-2"></i><i class="chip-4"></i><i class="chip-6"></i><i class="chip-8"></i><i class="chip-10"></i><i class="chip-12"></i><i class="chip-14"></i><i class="chip-16"></i><i class="chip-18"></i><i class="chip-20"></i><i class="chip-22"></i><i class="chip-24"></i></span>
+            </div>
+            <div class="break-switch">
+              <a class="break-button" href="#wall-hit-4" aria-controls="break-wall">
+                <span class="break-button-face">Break It!</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Chipped plaster</span></figcaption>
+          </figure>
+        </div>
+        <span class="break-target" id="wall-hit-4" hidden></span>
+        <div class="break-stage">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="A patch of plaster breaks away to reveal horizontal wooden laths."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/4_wall.png')">
+              <span class="break-dust" aria-hidden="true" style="left: 50%; top: 54%"><i class="chip-1"></i><i class="chip-2"></i><i class="chip-3"></i><i class="chip-4"></i><i class="chip-5"></i><i class="chip-6"></i><i class="chip-7"></i><i class="chip-8"></i><i class="chip-9"></i><i class="chip-10"></i><i class="chip-11"></i><i class="chip-12"></i><i class="chip-13"></i><i class="chip-14"></i><i class="chip-15"></i><i class="chip-16"></i><i class="chip-17"></i><i class="chip-18"></i><i class="chip-19"></i><i class="chip-20"></i><i class="chip-21"></i><i class="chip-22"></i><i class="chip-23"></i><i class="chip-24"></i></span>
+            </div>
+            <div class="break-switch">
+              <a class="break-button" href="#wall-hit-5" aria-controls="break-wall">
+                <span class="break-button-face">Break It!</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Exposed laths</span></figcaption>
+          </figure>
+        </div>
+        <span class="break-target" id="wall-hit-5" hidden></span>
+        <div class="break-stage">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="The opening widens, exposing more laths and a cable beneath the plaster."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/5_wall.png')">
+              <span class="break-dust" aria-hidden="true" style="left: 40%; top: 35%"><i class="chip-1"></i><i class="chip-3"></i><i class="chip-5"></i><i class="chip-7"></i><i class="chip-9"></i><i class="chip-11"></i><i class="chip-13"></i><i class="chip-15"></i><i class="chip-17"></i><i class="chip-19"></i><i class="chip-21"></i><i class="chip-23"></i></span>
+              <span class="break-dust" aria-hidden="true" style="left: 57%; top: 80%"><i class="chip-2"></i><i class="chip-4"></i><i class="chip-6"></i><i class="chip-8"></i><i class="chip-10"></i><i class="chip-12"></i><i class="chip-14"></i><i class="chip-16"></i><i class="chip-18"></i><i class="chip-20"></i><i class="chip-22"></i><i class="chip-24"></i></span>
+            </div>
+            <div class="break-switch">
+              <a class="break-button" href="#wall-hit-6" aria-controls="break-wall">
+                <span class="break-button-face">Break It!</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Widening break</span></figcaption>
+          </figure>
+        </div>
+        <span class="break-target" id="wall-hit-6" hidden></span>
+        <div class="break-stage">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="The column to the left breaks open, exposing steel reinforcement."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/6_wall.png')">
+              <span class="break-dust" aria-hidden="true" style="left: 28%; top: 45%"><i class="chip-1"></i><i class="chip-2"></i><i class="chip-3"></i><i class="chip-4"></i><i class="chip-5"></i><i class="chip-6"></i><i class="chip-7"></i><i class="chip-8"></i><i class="chip-9"></i><i class="chip-10"></i><i class="chip-11"></i><i class="chip-12"></i><i class="chip-13"></i><i class="chip-14"></i><i class="chip-15"></i><i class="chip-16"></i><i class="chip-17"></i><i class="chip-18"></i><i class="chip-19"></i><i class="chip-20"></i><i class="chip-21"></i><i class="chip-22"></i><i class="chip-23"></i><i class="chip-24"></i></span>
+            </div>
+            <div class="break-switch">
+              <a class="break-button" href="#wall-hit-7" aria-controls="break-wall">
+                <span class="break-button-face">Break It!</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Exposed rebar</span></figcaption>
+          </figure>
+        </div>
+        <span class="break-target" id="wall-hit-7" hidden></span>
+        <div class="break-stage">
+          <figure class="break-card">
+            <div class="break-preview" role="img" aria-label="Gaps open in the exposed laths beside the cracked column."
+              style="--frame-source: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/7_wall.png')">
+              <span class="break-dust" aria-hidden="true" style="left: 45%; top: 37%"><i class="chip-1"></i><i class="chip-3"></i><i class="chip-5"></i><i class="chip-7"></i><i class="chip-9"></i><i class="chip-11"></i><i class="chip-13"></i><i class="chip-15"></i><i class="chip-17"></i><i class="chip-19"></i><i class="chip-21"></i><i class="chip-23"></i></span>
+              <span class="break-dust" aria-hidden="true" style="left: 44%; top: 67%"><i class="chip-2"></i><i class="chip-4"></i><i class="chip-6"></i><i class="chip-8"></i><i class="chip-10"></i><i class="chip-12"></i><i class="chip-14"></i><i class="chip-16"></i><i class="chip-18"></i><i class="chip-20"></i><i class="chip-22"></i><i class="chip-24"></i></span>
+            </div>
+            <div class="break-switch break-reset">
+              <a class="break-button" href="#wall-hit-0" aria-controls="break-wall">
+                <span class="break-button-face">Reset preview</span>
+              </a>
+            </div>
+            <figcaption><strong>Wall</strong><span>Broken laths</span></figcaption>
+          </figure>
+        </div>
       </div>
       <div class="break-panel" id="break-glass" data-break-sequence>
         <span class="break-visually-hidden break-status" role="status" aria-atomic="true"></span>
@@ -862,19 +1009,23 @@
 
   <section class="section wrap" id="overview" aria-labelledby="overview-title">
     <div class="intro"><h2 id="overview-title">Less perfect.<br>More believable.</h2><p class="lead muted">A chipped edge. A split board. The structure behind a broken wall. Build the details that make a scene feel like something happened here.</p></div>
-    <div class="showcase">
-      <div class="tabs" role="tablist" aria-label="Explore damage by material">
-        <button class="tab" id="tab-concrete" role="tab" aria-controls="panel-concrete" aria-selected="true" tabindex="0">Concrete</button>
-        <button class="tab" id="tab-wood" role="tab" aria-controls="panel-wood" aria-selected="false" tabindex="-1">Wood</button>
-        <button class="tab" id="tab-metal" role="tab" aria-controls="panel-metal" aria-selected="false" tabindex="-1">Metal</button>
-        <button class="tab" id="tab-glass" role="tab" aria-controls="panel-glass" aria-selected="false" tabindex="-1">Glass</button>
+    <figure class="wall-compare" id="wall-compare">
+      <div class="compare-view">
+        <div class="compare-scroll" tabindex="0" role="region" aria-label="Scroll horizontally to compare the concrete pipe before and after damage">
+          <div class="compare-track">
+            <div class="compare-layer">
+              <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/compare_after.png" width="2000" height="1000" loading="lazy" decoding="async" draggable="false" alt="A section of the concrete pipe has broken away, exposing curved rebar beneath a patch of greenery.">
+            </div>
+            <div class="compare-layer compare-before">
+              <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/compare_before.png" width="2000" height="1000" loading="lazy" decoding="async" draggable="false" alt="The intact rim and side of a concrete pipe in a sunlit yard.">
+            </div>
+          </div>
+        </div>
+        <span class="compare-divider" aria-hidden="true"></span>
+        <input class="compare-range" type="range" min="0" max="100" value="50" aria-label="Amount of the before image shown" hidden>
       </div>
-      <div class="tab-panel" id="panel-concrete" role="tabpanel" aria-labelledby="tab-concrete" tabindex="0"><figure class="sample-media"><div class="image-placeholder" aria-hidden="true"></div></figure><div class="sample-copy"><h3>Break the surface.<br>Reveal the structure.</h3><p>Cut into concrete, chip the edges and expose reinforcement. Shape the opening, then tune the damage around its rim.</p><ul class="tags" aria-label="Concrete effects"><li>Boolean Break</li><li>Rebar</li><li>Surface &amp; edge damage</li></ul></div></div>
-      <div class="tab-panel" id="panel-wood" role="tabpanel" aria-labelledby="tab-wood" tabindex="0" hidden><figure class="sample-media"><div class="image-placeholder" aria-hidden="true"></div></figure><div class="sample-copy"><h3>Splintered wood.<br>Exposed layers.</h3><p>Build breaks around wooden boards, laths and framing. Combine structural inserts with surface wear and fractures for a layered result.</p><ul class="tags" aria-label="Wood effects"><li>Laths &amp; framing</li><li>Plank surfaces</li><li>Wood fracture</li></ul></div></div>
-      <div class="tab-panel" id="panel-metal" role="tabpanel" aria-labelledby="tab-metal" tabindex="0" hidden><figure class="sample-media"><div class="image-placeholder" aria-hidden="true"></div></figure><div class="sample-copy"><h3>Tear it.<br>Dent it. Wear it.</h3><p>Give hard surfaces a history with drawn metal tears, rusty holes, impact deformation and damaged edges. Control each effect separately.</p><ul class="tags" aria-label="Metal effects"><li>Metal tears</li><li>Rusty holes</li><li>Impact deform</li></ul></div></div>
-      <div class="tab-panel" id="panel-glass" role="tabpanel" aria-labelledby="tab-glass" tabindex="0" hidden><figure class="sample-media"><div class="image-placeholder" aria-hidden="true"></div></figure><div class="sample-copy"><h3>A point of impact.<br>A web of fractures.</h3><p>Create cracked and broken glass with impact-driven patterns, drawn damage and glass-specific fracture tools.</p><ul class="tags" aria-label="Glass effects"><li>Hit Glass</li><li>Glass Drawn</li><li>Glass fracture</li></ul></div></div>
-    </div>
-    <div class="showcase-caption"><span>Actual preset previews. Orange highlights generated damage and internal details.</span></div>
+      <figcaption><span>Before</span><span class="compare-hint">Scroll to compare</span><span>After</span></figcaption>
+    </figure>
   </section>
 
   <section class="section library wrap" id="effects" aria-labelledby="effects-title">
@@ -1309,34 +1460,21 @@
     backToTop.target = '_top';
   }
 
-  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
-    const tabs = Array.from(list.querySelectorAll('[role="tab"]'));
+  const comparison = document.getElementById('wall-compare');
+  const slider = comparison.querySelector('.compare-range');
+  const scrollView = comparison.querySelector('.compare-scroll');
+  function updateComparison() {
+    comparison.style.setProperty('--split', slider.value + '%');
+    slider.setAttribute('aria-valuetext', slider.value + '% before, ' + (100 - slider.value) + '% after');
+  }
+  comparison.setAttribute('data-slider', '');
+  scrollView.removeAttribute('tabindex');
+  scrollView.removeAttribute('role');
+  scrollView.removeAttribute('aria-label');
+  slider.hidden = false;
+  slider.addEventListener('input', updateComparison);
+  updateComparison();
 
-    function activate(tab, moveFocus) {
-      tabs.forEach(function (item) {
-        const active = item === tab;
-        item.setAttribute('aria-selected', String(active));
-        item.tabIndex = active ? 0 : -1;
-        document.getElementById(item.getAttribute('aria-controls')).hidden = !active;
-      });
-      if (moveFocus) tab.focus();
-      reportHeight();
-    }
-
-    tabs.forEach(function (tab, index) {
-      tab.addEventListener('click', function () { activate(tab, false); });
-      tab.addEventListener('keydown', function (event) {
-        let next;
-        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-        if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
-        if (event.key === 'Home') next = 0;
-        if (event.key === 'End') next = tabs.length - 1;
-        if (next === undefined) return;
-        event.preventDefault();
-        activate(tabs[next], true);
-      });
-    });
-  });
   var scheduled=false,lastHeight=0;
   function reportHeight(){
     if(window.parent===window||scheduled)return;
