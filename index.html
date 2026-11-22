@@ -649,6 +649,15 @@
       #physics .demo-heading { grid-template-columns: 1fr; grid-template-areas: "title" "description" "button"; }
       .physics-support-button { justify-self: start; }
     }
+    .product-details { margin: 0; }
+    .product-details > summary { padding-inline: clamp(20px, 4vw, 48px); }
+    .product-specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 24px 40px; padding-block: 24px 32px; }
+    .product-specs section { border-top: 1px solid var(--line); padding-top: 12px; }
+    .product-specs h3 { font-size: clamp(21px, 2.5vw, 30px); line-height: 1.12; }
+    .product-specs p, .product-specs ul { margin: 10px 0 0; font-size: 15px; line-height: 1.5; }
+    .product-specs ul { padding-left: 1.2em; }
+    .product-specs li + li { margin-top: 6px; }
+    @media (max-width: 720px) { .product-specs { grid-template-columns: 1fr; gap: 18px; } }
   </style>
 </head>
 <body>
@@ -682,7 +691,7 @@
     <fieldset class="break-demo">
       <legend class="break-visually-hidden">Break It presets</legend>
       <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-stature" aria-controls="break-stature break-wall" checked>
-      <label class="break-tab" for="break-tab-stature">Stage &amp; Wall</label>
+      <label class="break-tab" for="break-tab-stature">Statue &amp; Wall</label>
       <input class="break-visually-hidden" type="radio" name="break-material" id="break-tab-glass" aria-controls="break-glass break-metal">
       <label class="break-tab" for="break-tab-glass">Glass &amp; Metal</label>
       <div class="break-panel" id="break-stature" data-break-sequence>
@@ -697,7 +706,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stage</strong><span>Intact statue</span></figcaption>
+            <figcaption><strong>Statue</strong><span>Intact statue</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-1" hidden></span>
@@ -715,7 +724,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stage</strong><span>Surface wear</span></figcaption>
+            <figcaption><strong>Statue</strong><span>Surface wear</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-2" hidden></span>
@@ -735,7 +744,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stage</strong><span>Fractures</span></figcaption>
+            <figcaption><strong>Statue</strong><span>Fractures</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-3" hidden></span>
@@ -754,7 +763,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stage</strong><span>Surface erosion</span></figcaption>
+            <figcaption><strong>Statue</strong><span>Surface erosion</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-4" hidden></span>
@@ -771,7 +780,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stage</strong><span>Face damage</span></figcaption>
+            <figcaption><strong>Statue</strong><span>Face damage</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-5" hidden></span>
@@ -789,7 +798,7 @@
                 <span class="break-button-face">Break It!</span>
               </a>
             </div>
-            <figcaption><strong>Stage</strong><span>Exposed rebar</span></figcaption>
+            <figcaption><strong>Statue</strong><span>Exposed rebar</span></figcaption>
           </figure>
         </div>
         <span class="break-target" id="stature-hit-7" hidden></span>
@@ -808,7 +817,7 @@
                 <span class="break-button-face">Reset preview</span>
               </a>
             </div>
-            <figcaption><strong>Stage</strong><span>Final break</span></figcaption>
+            <figcaption><strong>Statue</strong><span>Final break</span></figcaption>
           </figure>
         </div>
       </div>
@@ -1440,6 +1449,41 @@
       </details>
     </div>
   </section>
+
+  <details class="all-effects product-details" id="product-details">
+    <summary><h2>More Details</h2></summary>
+    <div class="product-specs wrap">
+      <section>
+        <h3>What’s included</h3>
+        <p>Project Damage 1.0 includes <strong>64 effects and generators</strong>. The asset browser offers <strong>71 choices</strong> when the eight Boolean Break variants are counted separately. The 572 looks in Presets Vol. 1 are starting settings for these tools.</p>
+      </section>
+      <section>
+        <h3>Grease Pencil</h3>
+        <p>What a stroke controls depends on the effect.</p>
+        <ul>
+          <li><strong>Place damage.</strong> Draw chips with Edge Damage, Corner Damage, Surface Damage or Damaged Edge Bevel. Place marks with Scratches Draw, Bullet Impacts, Metal Tear Draw, Rusty Holes or Clay.</li>
+          <li><strong>Expose a structure.</strong> Draw openings with Concrete Damage and V2, Wood Damage, Lath Damage and its V2, Riven Lath, Stud Framing, Pipe Damage and Cable Damage. The standalone Rebars, Pipes, Wooden Laths, Studs and Bricks generators also accept damage drawings.</li>
+          <li><strong>Cut and peel.</strong> Glass Drawn uses contours for holes. Wallpaper, Peeling, Paper Generator and Fabric Tears have drawing controls for their respective surfaces. Fracture, Cell Fracture, Ground Cracks and Ground Fissures use strokes to guide breaks.</li>
+          <li><strong>Trace or scatter.</strong> Guide Ivy and Roots growth, trace Expanding Foam or Welded Edges, and mark regions for Grass Scatter and Gravel Scatter.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Fill &amp; rigid-body physics</h3>
+        <p><strong>Fill Damage / Fill V2</strong> reconstruct the missing volume for Edge, Corner and Surface Damage, Damaged Edge Bevel, Concrete Damage and V2, Hanging Rebar Holes, Pipe and Cable Damage, Lath Damage and V2, Riven Lath, Stud Framing and all eight Boolean Break variants. Bullet Impacts supports the original Fill Damage tool.</p>
+        <p>Use <strong>Fracture Fills</strong> to turn restored volumes into pieces. <strong>Cell Fracture</strong> can split the source mesh directly, including with its Glass pattern. Assign colliders, choose when pieces activate, then run or bake the simulation. Chain Reaction lets activation spread between pieces.</p>
+      </section>
+      <section>
+        <h3>What the mesh keeps</h3>
+        <p><strong>Preserve Source Data</strong> carries UV maps, source materials, vertex groups and supported mesh attributes onto the result. Surviving faces keep their material assignments. UVs and weights are mapped onto rebuilt geometry. New fracture interiors can use their own material and inside-face UV map.</p>
+        <p>Damage zones get their own <strong>PD_… vertex groups</strong> by effect. Select a group to work on the affected vertices, or use its face mask to select the damaged faces along a shared rim. The editable source stays available while you build the stack.</p>
+      </section>
+      <section>
+        <h3>Limits on complex meshes</h3>
+        <p><strong>Fill Damage</strong> reconstructs the difference between the source and the damaged mesh. Open boundaries, self-intersections or overlapping shells can produce an incomplete or unexpected fill. Inspect the restored volume before fracturing it.</p>
+        <p>In <strong>Cell Fracture</strong>, <strong>Guidance</strong> concentrates smaller pieces near a stroke. <strong>Knife Through</strong> projects a cut through depth and needs a stroke that divides a piece or joins an existing cut. Complex geometry can give uneven results or leave pieces uncut. Extend the stroke across the piece, or use a Cut Plane for a more predictable through-cut.</p>
+      </section>
+    </div>
+  </details>
 
   <details class="benchmark" id="benchmark">
     <summary class="benchmark-toggle wrap">
