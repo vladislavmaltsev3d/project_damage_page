@@ -46,11 +46,34 @@
     .effect-image img{display:block;width:100%;height:auto}
     .effect-card figcaption{display:flex;justify-content:space-between;gap:8px;font-size:15px;letter-spacing:-.025em;padding:14px 0;border-bottom:1px solid var(--line)}
     .effect-card figcaption span{color:var(--muted);font:10px/1.4 var(--mono)}
-    .all-effects{margin-top:clamp(24px,4vw,40px)}
-    .all-effects>summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:clamp(13px,2vw,21px) clamp(16px,3vw,26px);background:var(--line);color:var(--ink);border:1px solid var(--ink);cursor:pointer;font-size:clamp(16px,2vw,24px);list-style:none}
-    .all-effects summary::-webkit-details-marker{display:none}
-    .all-effects>summary::after{content:"+";font:400 27px/1 var(--sans);flex-shrink:0}
-    .all-effects[open]>summary::after{content:"−"}
+    .panel-trigger {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px 24px;
+      width: 100%; padding: clamp(13px, 2vw, 21px) clamp(16px, 3vw, 26px);
+      border: 1px solid var(--ink); background: var(--line); color: var(--ink); text-align: left;
+    }
+    .panel-trigger:hover, .panel-trigger:focus-visible { background: var(--light); }
+    .panel-trigger-label {
+      display: block; font: 500 clamp(20px, 3.2vw, 36px)/1.1 Impact, "Arial Black", Arial, sans-serif;
+      text-transform: uppercase; letter-spacing: .022em;
+    }
+    .panel-trigger-plus {
+      display: grid; place-items: center; flex: 0 0 auto;
+      width: 40px; height: 40px; border: 1px solid currentColor; font: 26px/1 var(--mono);
+    }
+    .effects-trigger { margin-top: clamp(24px, 4vw, 40px); }
+    .page-popup {
+      position: fixed; inset: 0; margin: auto; width: min(1160px, calc(100% - 32px));
+      max-height: min(660px, calc(100dvh - 32px)); padding: 0; overflow: auto; overscroll-behavior: contain;
+      border: 1px solid var(--ink); background: var(--light); color: var(--ink);
+      box-shadow: 0 8px 25px rgb(21 22 20 / 20%);
+    }
+    .page-popup[data-anchored] { top: var(--popup-top); bottom: auto; margin-block: 0; }
+    .page-popup::backdrop { background: rgb(21 22 20 / 23%); }
+    .page-popup .physics-support-head { z-index: 1; }
+    @media (max-width: 520px) {
+      .panel-trigger { gap: 12px; }
+      .panel-trigger-plus { width: 34px; height: 34px; }
+    }
     .all-effects-panel{background:#dedfda}
     .all-effects-panel img{display:block;width:100%;height:auto}
     .section.physics-section { padding-block-end: clamp(32px, 5vw, 64px); }
@@ -120,7 +143,6 @@
       .break-card figcaption { padding: 9px 11px; }
     }
     .closing{padding-block:45px;background:var(--ink);color:var(--paper);display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}.closing h2{font-size:clamp(34px,5.6vw,65px)}.closing p{font-size:13px;line-height:1.6;color:#aeb0a6;margin-top:17px;max-width:460px}.contact-link{display:flex;justify-content:space-between;gap:35px;align-items:center;background:var(--orange);color:var(--ink);padding:20px 24px;font-size:13px;font-weight:600;min-width:210px;transition:background .2s}.contact-link:hover{background:#ff794c}.contact-link .arrow{font-size:27px}.footer{display:flex;align-items:center;justify-content:space-between;gap:25px;padding-block:24px;font:9px/1.5 var(--mono);text-transform:uppercase}.footer-name{font-weight:700}.footer a{border-bottom:1px solid var(--ink);padding-bottom:3px}.skip-link{position:absolute;z-index:10;left:20px;top:15px;padding:12px;background:var(--orange);transform:translateY(-180%)}.skip-link:focus{transform:none}
-    .supported-os{margin-bottom:clamp(28px,4vw,38px);padding:clamp(16px,2.5vw,24px);border:1px solid var(--ink);background:var(--orange);color:var(--ink);font-size:15px;line-height:1.45}
     .supported-os, .documentation-note { padding: clamp(16px, 2.5vw, 24px); border: 1px solid var(--ink); background: var(--orange); color: var(--ink); font-size: 15px; line-height: 1.45; }
     .supported-os { margin-bottom: clamp(28px, 4vw, 38px); }
     .limitation-physics { grid-column: 1 / -1; }
@@ -131,7 +153,7 @@
     @media(max-width:620px){.limitations-intro{grid-template-columns:1fr;gap:20px;margin-bottom:28px}.limitations-intro .lead{font-size:13px}.limitations-grid{grid-template-columns:1fr;gap:27px}.limitation{padding-top:18px}.limitation-number{margin-bottom:12px}.limitation h3{font-size:24px;margin-bottom:12px}.limitation p{font-size:12px}.limitations-note{font-size:11px;margin-top:27px}}
 
     @media(max-width:900px){.spec{padding:19px 14px}.spec strong{font-size:18px}.intro{gap:35px}.section{padding-block:55px}.closing{gap:25px}.contact-link{min-width:190px}}
-    @media(max-width:620px){.wrap{padding-inline:20px}.spec{padding:18px 20px}.spec strong{font-size:20px}.spec span{font-size:8px}.section{padding-block:43px}h2{font-size:43px}.intro{grid-template-columns:1fr;gap:20px;margin-bottom:27px}.intro .lead{font-size:13px;max-width:360px}.effect-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.effect-card figcaption{font-size:12px;padding-block:11px}.effect-card figcaption span{display:none}.effect-categories{grid-template-columns:1fr 1fr;gap:25px 20px}.effect-categories p{font-size:11px}.effect-categories h3{font-size:9px}.all-effects{margin-top:28px}.all-effects>summary{font-size:13px}.preset-footnote{font-size:8px;margin-top:24px}.closing{grid-template-columns:1fr;padding-block:35px;gap:25px}.closing h2{font-size:43px}.closing p{font-size:12px}.contact-link{width:100%;padding:17px 20px;font-size:12px}.footer{align-items:flex-start;padding-block:20px;font-size:8px;gap:15px}.footer span:nth-child(2){max-width:120px}}
+    @media(max-width:620px){.wrap{padding-inline:20px}.spec{padding:18px 20px}.spec strong{font-size:20px}.spec span{font-size:8px}.section{padding-block:43px}h2{font-size:43px}.intro{grid-template-columns:1fr;gap:20px;margin-bottom:27px}.intro .lead{font-size:13px;max-width:360px}.effect-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.effect-card figcaption{font-size:12px;padding-block:11px}.effect-card figcaption span{display:none}.effect-categories{grid-template-columns:1fr 1fr;gap:25px 20px}.effect-categories p{font-size:11px}.effect-categories h3{font-size:9px}.preset-footnote{font-size:8px;margin-top:24px}.closing{grid-template-columns:1fr;padding-block:35px;gap:25px}.closing h2{font-size:43px}.closing p{font-size:12px}.contact-link{width:100%;padding:17px 20px;font-size:12px}.footer{align-items:flex-start;padding-block:20px;font-size:8px;gap:15px}.footer span:nth-child(2){max-width:120px}}
     @media(max-width:360px){.footer{font-size:7px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
     @media print{body{background:var(--paper)}.page{max-width:none}.contact-link{display:none}.wall-compare{break-inside:avoid}.section{padding-block:35px}}
@@ -161,7 +183,7 @@
       .hero-copy { grid-template-columns: minmax(0, 1fr); gap: 12px; }
       .hero-copy h1 { font-size: clamp(40px, 10vw, 60px); }
     }
-    h1, h2, h3, .all-effects > summary, .supported-os strong { font-family: Impact, "Arial Black", Arial, sans-serif; text-transform: uppercase; }
+    h1, h2, h3, .supported-os strong { font-family: Impact, "Arial Black", Arial, sans-serif; text-transform: uppercase; }
     .feedback-heart { display: inline-block; height: .76em; height: 1cap; width: auto; vertical-align: baseline; fill: currentColor; }
     .feedback-copy{max-width:66ch;margin-top:22px;font-size:16px;line-height:1.7}.feedback-copy p+p{margin-top:12px}
     .experimental{background:var(--orange);color:var(--ink)}.experimental-copy{max-width:66ch;margin-top:22px;font-size:16px;line-height:1.7}.experimental-copy p+p{margin-top:12px}
@@ -581,16 +603,10 @@
       .sequence-action-row, .sequence-buttons .sequence-reset { width: 100%; }
     }
 
-    .benchmark{border-block:1px solid var(--ink)}
-    .benchmark-toggle{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px 24px;background:var(--orange);color:var(--ink);padding-block:clamp(17px,2.5vw,28px);cursor:pointer;list-style:none}
-    .benchmark-toggle::-webkit-details-marker{display:none}
-    .benchmark-title{display:block;font:500 clamp(30px,5vw,54px)/1.1 Impact,"Arial Black",Arial,sans-serif;letter-spacing:.022em;text-transform:uppercase}
+    .benchmark-toggle { padding-block: clamp(17px, 2.5vw, 28px); background: var(--orange); }
+    .benchmark-toggle:hover, .benchmark-toggle:focus-visible { background: #ff794c; }
+    .benchmark-toggle .panel-trigger-label { font-size: clamp(26px, 5vw, 54px); }
     .benchmark-description{display:block;max-width:76ch;margin-top:6px;font-size:14px;line-height:1.45}
-    .benchmark-action{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;white-space:nowrap}
-    .benchmark-icon{display:grid;place-items:center;width:40px;height:40px;border:1px solid currentColor;font-size:26px;line-height:1}
-    .benchmark-icon::before{content:"+"}
-    .benchmark[open] .benchmark-icon::before{content:"−"}
-    .benchmark[open] .benchmark-action>span:first-child{visibility:hidden}
     .benchmark-panel{background:#dedfda;padding-block:clamp(18px,4vw,42px)}
     .benchmark-figure img{display:block;width:100%;height:auto}
     .benchmark-figure figcaption{font-size:12px;line-height:1.55;color:var(--muted)}
@@ -605,9 +621,6 @@
     .benchmark-table-wrap th:first-child{text-align:left}
     .benchmark-table-wrap td{text-align:right;white-space:nowrap}
     @media(max-width:520px){
-      .benchmark-toggle{gap:8px 12px}
-      .benchmark-action{flex-direction:column-reverse;gap:3px;font-size:11px}
-      .benchmark-icon{width:34px;height:34px}
       .benchmark-table-wrap table{min-width:760px}
     }
     .preset-section { background: var(--orange); border-top: 1px solid var(--ink); padding-block: clamp(20px, 2.6vw, 32px); }
@@ -677,10 +690,8 @@
       #physics .demo-heading { grid-template-columns: 1fr; grid-template-areas: "title" "description" "button"; }
       .physics-support-button { justify-self: start; }
     }
-    .product-details { margin: 0; }
-    .product-details > summary { padding-inline: clamp(20px, 4vw, 48px); }
     .product-specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 24px 40px; padding-block: 24px 32px; }
-    .product-specs section { border-top: 1px solid var(--line); padding-top: 12px; }
+    .product-specs > section { border-top: 1px solid var(--line); padding-top: 12px; }
     .product-specs h3 { font-size: clamp(21px, 2.5vw, 30px); line-height: 1.12; }
     .product-specs p, .product-specs ul { margin: 10px 0 0; font-size: 15px; line-height: 1.5; }
     .product-specs ul { padding-left: 1.2em; }
@@ -1180,16 +1191,23 @@
         <figcaption>Peeling <span>Lift</span></figcaption>
       </figure>
     </div>
-    <details class="all-effects">
-      <summary>Explore all 71 assets</summary>
-      <div class="all-effects-panel">
-        <img
-          src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/Project%20Damage%20-%20Effects%20and%20Generators.webp"
-          alt="Complete Project Damage reference chart showing all 71 assets."
-          width="2560" height="3105" loading="lazy" decoding="async"
-        >
+    <button type="button" class="panel-trigger effects-trigger" popovertarget="pd-assets" aria-haspopup="dialog">
+      <span class="panel-trigger-label">Explore all 71 assets</span>
+      <span class="panel-trigger-plus" aria-hidden="true">+</span>
+    </button>
+    <div class="page-popup" id="pd-assets" popover="auto" role="dialog" aria-labelledby="pd-assets-title">
+      <div class="physics-support-head">
+        <h3 id="pd-assets-title">Explore all 71 assets</h3>
+        <button type="button" popovertarget="pd-assets" popovertargetaction="hide" aria-label="Close Explore all 71 assets" autofocus>×</button>
       </div>
-    </details>
+      <div class="all-effects-panel">
+          <img
+            src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/Project%20Damage%20-%20Effects%20and%20Generators.webp"
+            alt="Complete Project Damage reference chart showing all 71 assets."
+            width="2560" height="3105" loading="lazy" decoding="async"
+          >
+        </div>
+    </div>
   </section>
 
   <section class="section wrap" id="control" aria-labelledby="control-title">
@@ -1252,7 +1270,6 @@
         </section>
         <section>
           <h4>Current pricing and future updates</h4>
-          <p>The current price covers the static toolkit. You can try the experimental physics tools at no extra cost while development continues. Future updates will focus on reliability. Once physics is stable, we plan to raise the price for new purchases by about 50%.</p>
           <p>The current price covers the static toolkit. You can try the experimental physics tools at no extra cost while development continues. Future updates will focus on reliability. Once I finish the physics module, the price for new purchases will increase by 30%.</p>
         </section>
         <section>
@@ -1492,42 +1509,44 @@
     </div>
   </section>
 
-  <details class="all-effects product-details" id="product-details">
-    <summary><h2>More Details</h2></summary>
+  <button type="button" class="panel-trigger" popovertarget="product-details" aria-haspopup="dialog">
+    <span class="panel-trigger-label">More Details</span>
+    <span class="panel-trigger-plus" aria-hidden="true">+</span>
+  </button>
+  <div class="page-popup" id="product-details" popover="auto" role="dialog" aria-labelledby="product-details-title">
+    <div class="physics-support-head">
+      <h3 id="product-details-title">More Details</h3>
+      <button type="button" popovertarget="product-details" popovertargetaction="hide" aria-label="Close More Details" autofocus>×</button>
+    </div>
     <div class="product-specs wrap">
       <section>
         <h3>What’s included</h3>
-        <p>Project Damage 1.0 includes <strong>64 effects and generators</strong>. The asset browser offers <strong>71 choices</strong> when the eight Boolean Break variants are counted separately. The 1,512 presets in the extended library are starting settings for these tools.</p>
+        <p>Project Damage generates editable geometry for wear, fractures, cuts and exposed structures. The Project Damage 1.0 catalog groups <strong>64 effects and generators</strong> into <strong>71 asset choices</strong> when the eight Boolean Break variants are listed separately. The extended library contains <strong>1,512 presets</strong>.</p>
       </section>
       <section>
         <h3>Source mesh requirements</h3>
         <p>Check the object’s dimensions and scene units first. Most damage sizes are set in centimetres. Select the mesh in Object Mode and run <strong>Add Project Damage</strong>. It applies rotation and scale while preserving the mesh’s world-space shape.</p>
-        <ul>
-          <li><strong>Walls and solid props.</strong> Use a closed, manifold mesh with outward-facing normals and enough thickness for the intended cut or reinforcement. Remove loose geometry and overlapping faces, and merge accidental duplicate vertices.</li>
+        <ul><li><strong>Walls and solid props.</strong> Use a closed, manifold mesh with outward-facing normals and enough thickness for the intended cut or reinforcement. Remove loose geometry and overlapping faces, and merge accidental duplicate vertices.</li>
           <li><strong>Planes and open scans.</strong> Use <strong>Thin Shell</strong> for temporary backing, or <strong>Add Thickness</strong> to give a plane depth. If a wall already has front and back faces, <strong>Make Closed</strong> can bridge matching boundary loops.</li>
           <li><strong>Cloth.</strong> Use <strong>Fabric Tears → Flat</strong> for a single sheet. For a garment with thickness, use <strong>Solidify</strong> and keep the Panel Thickness Limit smaller than the gap to the next layer.</li>
-          <li><strong>Curved or sculpted meshes.</strong> Choose <strong>Organic Models</strong> where available. Keep damage patches and generated parts smaller than the local bend radius. Tight folds can cause neighbouring pieces to overlap.</li>
-        </ul>
+          <li><strong>Curved or sculpted meshes.</strong> Choose <strong>Organic Models</strong> where available. Keep damage patches and generated parts smaller than the local bend radius. Tight folds can cause neighbouring pieces to overlap.</li></ul>
       </section>
       <section>
         <h3>Grease Pencil</h3>
         <p>What a stroke controls depends on the effect.</p>
-        <ul>
-          <li><strong>Place damage.</strong> Draw chips with Edge Damage, Corner Damage, Surface Damage or Damaged Edge Bevel. Place marks with Scratches Draw, Bullet Impacts, Metal Tear Draw, Rusty Holes or Clay.</li>
+        <ul><li><strong>Place damage.</strong> Draw chips with Edge Damage, Corner Damage, Surface Damage or Damaged Edge Bevel. Place marks with Scratches Draw, Bullet Impacts, Metal Tear Draw, Rusty Holes or Clay.</li>
           <li><strong>Expose a structure.</strong> Draw openings with Concrete Damage and V2, Wood Damage, Lath Damage and its V2, Riven Lath, Stud Framing, Pipe Damage and Cable Damage. The standalone Rebars, Pipes, Wooden Laths, Studs and Bricks generators also accept damage drawings.</li>
           <li><strong>Cut and peel.</strong> Glass Drawn uses contours for holes. Wallpaper, Peeling, Paper Generator and Fabric Tears have drawing controls for their respective surfaces. Fracture, Cell Fracture, Ground Cracks and Ground Fissures use strokes to guide breaks.</li>
-          <li><strong>Trace or scatter.</strong> Guide Ivy and Roots growth, trace Expanding Foam or Welded Edges, and mark regions for Grass Scatter and Gravel Scatter.</li>
-        </ul>
+          <li><strong>Trace or scatter.</strong> Guide Ivy and Roots growth, trace Expanding Foam or Welded Edges, and mark regions for Grass Scatter and Gravel Scatter.</li></ul>
       </section>
       <section>
         <h3>Fill &amp; rigid-body physics</h3>
-        <p><strong>Fill Damage / Fill V2</strong> reconstruct the missing volume for Edge, Corner and Surface Damage, Damaged Edge Bevel, Concrete Damage and V2, Hanging Rebar Holes, Pipe and Cable Damage, Lath Damage and V2, Riven Lath, Stud Framing and all eight Boolean Break variants. Bullet Impacts supports the original Fill Damage tool.</p>
-        <p>Use <strong>Fracture Fills</strong> to turn restored volumes into pieces. <strong>Cell Fracture</strong> can split the source mesh directly, including with its Glass pattern. Assign colliders, choose when pieces activate, then run or bake the simulation. Chain Reaction lets activation spread between pieces.</p>
+        <p><strong>Fill Damage / Fill V2</strong> reconstruct missing volume on supported damage effects. Use <strong>Fracture Fills</strong> to turn the restored volume into pieces. <strong>Cell Fracture</strong> can also split the source mesh directly, including with its Glass pattern.</p><p>Assign colliders, choose when pieces activate, then run or bake the simulation. Chain Reaction lets activation spread between pieces. The Physics Support List in Quick Physics lists the supported effects.</p>
       </section>
       <section>
         <h3>What the mesh keeps</h3>
         <p><strong>Preserve Source Data</strong> carries UV maps, source materials, vertex groups and supported mesh attributes onto the result. Surviving faces keep their material assignments. UVs and weights are mapped onto rebuilt geometry. New fracture interiors can use their own material and inside-face UV map.</p>
-        <p>Damage zones get their own <strong>PD_… vertex groups</strong> by effect. Select a group to work on the affected vertices, or use its face mask to select the damaged faces along a shared rim. The editable source stays available while you build the stack.</p>
+        <p>Damage zones get their own <strong>PD_… vertex groups</strong> by effect. Select a group to work on the affected vertices, or use its face mask to select the damaged faces along a shared rim. The editable source stays available while you build the stack.</p><p><strong>Apply All</strong> bakes the final stack and keeps a hidden editable source. Mesh scale, thickness and quality settings affect the result. Use <strong>Draft Mode</strong> while placing damage and inspect the full-quality mesh before applying the stack.</p>
       </section>
       <section>
         <h3>Limits on complex meshes</h3>
@@ -1535,16 +1554,17 @@
         <p>In <strong>Cell Fracture</strong>, <strong>Guidance</strong> concentrates smaller pieces near a stroke. <strong>Knife Through</strong> projects a cut through depth and needs a stroke that divides a piece or joins an existing cut. Complex geometry can give uneven results or leave pieces uncut. Extend the stroke across the piece, or use a Cut Plane for a more predictable through-cut.</p>
       </section>
     </div>
-  </details>
+  </div>
 
-  <details class="benchmark" id="benchmark">
-    <summary class="benchmark-toggle wrap">
-      <span>
-        <span class="benchmark-title">Test performance for free</span>
-        <span class="benchmark-description">Download the Simple Benchmark from the free version of Project Damage. Install the ZIP as a Blender add-on and run it to see how Project Damage performs on your system.</span>
-      </span>
-      <span class="benchmark-action"><span>Click here</span><span class="benchmark-icon" aria-hidden="true"></span></span>
-    </summary>
+  <button type="button" class="panel-trigger benchmark-toggle wrap" popovertarget="benchmark" aria-haspopup="dialog">
+    <span><span class="panel-trigger-label">Test performance for free</span><span class="benchmark-description">Download the Simple Benchmark from the free version of Project Damage. Install the ZIP as a Blender add-on and run it to see how Project Damage performs on your system.</span></span>
+    <span class="panel-trigger-plus" aria-hidden="true">+</span>
+  </button>
+  <div class="page-popup" id="benchmark" popover="auto" role="dialog" aria-labelledby="benchmark-title">
+    <div class="physics-support-head">
+      <h3 id="benchmark-title">Test performance for free</h3>
+      <button type="button" popovertarget="benchmark" popovertargetaction="hide" aria-label="Close Test performance for free" autofocus>×</button>
+    </div>
     <div class="benchmark-panel wrap">
       <figure class="benchmark-figure">
         <img src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/Project%20Damage%20-%20Simple%20Benchmark%20Collage.jpg" alt="Simple Benchmark collage showing Usual Work at three mesh densities, Classical Statue, Concrete Pipe with Ivy, Metal Barrel, and Peeling Concrete Barrier." width="2400" height="2000" loading="lazy" decoding="async">
@@ -1573,7 +1593,7 @@
         </table>
       </div>
     </div>
-  </details>
+  </div>
 
   <section class="section wrap" id="limitations" aria-labelledby="limitations-title">
     <div class="limitations-intro"><h2 id="limitations-title">Before you<br>purchase.</h2><p class="lead">A few things to know about the geometry, performance and animation workflow, so you can plan how Project Damage fits your projects.</p></div>
@@ -1629,8 +1649,15 @@
   </section>
 
   <section class="closing wrap" id="support" aria-labelledby="support-title"><div><h2 id="support-title">Give your scene<br>some history.</h2><p>Questions about Project Damage, setup or a particular effect? Get in touch with Lazy3D.</p></div><a class="contact-link" href="https://superhivemarket.com/creators/lazy3d" target="_blank" rel="noopener noreferrer">Contact on SuperHive <span class="arrow" aria-hidden="true">↗</span></a></section>
-  <details class="all-effects product-details" id="change-logs">
-    <summary><h2>Change logs info</h2></summary>
+  <button type="button" class="panel-trigger" popovertarget="change-logs" aria-haspopup="dialog">
+    <span class="panel-trigger-label">Changelogs</span>
+    <span class="panel-trigger-plus" aria-hidden="true">+</span>
+  </button>
+  <div class="page-popup" id="change-logs" popover="auto" role="dialog" aria-labelledby="change-logs-title">
+    <div class="physics-support-head">
+      <h3 id="change-logs-title">Changelogs</h3>
+      <button type="button" popovertarget="change-logs" popovertargetaction="hide" aria-label="Close Changelogs" autofocus>×</button>
+    </div>
     <div class="product-specs wrap">
       <section>
         <h3>1.0.2 · Experimental release version</h3>
@@ -1644,7 +1671,7 @@
         <p><time datetime="2026-11-15">November 15, 2026</time></p>
       </section>
     </div>
-  </details>
+  </div>
   <footer class="footer wrap"><span class="footer-name">Project Damage / Lazy3D</span><span>Destruction, by design.<br>Tools for Blender artists.</span><a id="back-to-top" href="#top">Back to top ↑</a></footer>
 </main>
 <script>
@@ -1664,6 +1691,26 @@
     backToTop.href = product.href + '#';
     backToTop.target = '_top';
   }
+
+  // A tall embedded iframe has its own large viewport. Keep a popover near its
+  // trigger so it opens in the part of the page the reader is looking at.
+  document.querySelectorAll('.panel-trigger').forEach(function (trigger) {
+    const panel = document.getElementById(trigger.getAttribute('popovertarget'));
+    panel.addEventListener('beforetoggle', function (event) {
+      if (event.newState !== 'open') return;
+      const anchored = window.parent !== window && window.innerHeight > window.screen.availHeight;
+      panel.toggleAttribute('data-anchored', anchored);
+      if (anchored) {
+        panel.style.setProperty('--popup-top', Math.max(12, trigger.getBoundingClientRect().top - 12) + 'px');
+      }
+    });
+    panel.addEventListener('toggle', function (event) {
+      if (event.newState !== 'open' || !panel.hasAttribute('data-anchored')) return;
+      const triggerTop = trigger.getBoundingClientRect().top - 12;
+      const lastTop = window.innerHeight - panel.offsetHeight - 12;
+      panel.style.setProperty('--popup-top', Math.max(12, Math.min(triggerTop, lastTop)) + 'px');
+    });
+  });
 
   const presetPreview = document.querySelector('.preset-preview');
   if (presetPreview && 'IntersectionObserver' in window) {
