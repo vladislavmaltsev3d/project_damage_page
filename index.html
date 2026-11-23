@@ -506,6 +506,16 @@
     }
     .sequence-copy h3 { font-size: clamp(28px, 3.8vw, 48px); line-height: 1.1; letter-spacing: .022em; }
     .sequence-description { max-width: 36ch; margin-top: 12px; font-size: 15px; line-height: 1.55; color: var(--muted); }
+    .sequence-picture img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .sequence-card[data-loading] .sequence-buttons a,
+    .sequence-card[data-loading] .sequence-lens { visibility: hidden; }
+    .sequence-load {
+      grid-area: actions; align-self: start; width: min(100%, 310px);
+      margin-top: clamp(16px, 2.5vw, 30px); padding: 10px 14px; min-height: 46px;
+      border: 1px solid var(--ink); background: var(--paper);
+      color: var(--ink); font: 700 14px/1.3 var(--sans); text-align: left;
+    }
+    @media (max-width: 720px) { .sequence-load { width: 100%; margin-top: 10px; } }
     .sequence-buttons { display: contents; }
     .sequence-action-row, .sequence-buttons .sequence-reset { width: min(100%, 310px); }
     .sequence-buttons a {
@@ -1298,6 +1308,7 @@
     <h2 id="effect-sequence-title">Damage, layer by layer.</h2>
     <p class="sequence-announcement" role="status" aria-atomic="true"></p>
     <div class="sequence-card">
+      <button type="button" class="sequence-load" hidden disabled>Loading layers…</button>
       <span class="sequence-target" id="pd-layer-0" hidden></span>
       <div class="sequence-frame sequence-first" style="--layer-image: url('https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/S0.png')">
         <figure class="sequence-preview" role="img" aria-label="Intact concrete wall before any effects are applied"><div class="sequence-picture"></div></figure>
@@ -1788,25 +1799,59 @@
     return card.querySelector('[data-active]') || (target && target.nextElementSibling) || card.querySelector('.sequence-first');
   }
 
-  let nextImage;
-  function preloadNextLayer() {
-    const link = currentFrame().querySelector('.sequence-next, .sequence-alternate');
-    if (!link) return;
-    const next = document.getElementById(link.hash.slice(1)).nextElementSibling;
-    const source = next.style.getPropertyValue('--layer-image').trim().slice(4, -1).replace(/^["']|["']$/g, '');
-    if (nextImage && nextImage.src === source) return;
-    nextImage = new Image();
-    nextImage.fetchPriority = 'low';
-    nextImage.src = source;
+  const frames = Array.from(card.querySelectorAll('.sequence-frame'));
+  const loadButton = card.querySelector('.sequence-load');
+  let decoded = 0;
+  let loading = false;
+  card.setAttribute('data-loading', '');
+  card.setAttribute('data-selected', '');
+  frames[0].setAttribute('data-active', '');
+  loadButton.hidden = false;
+
+  async function prepareLayers() {
+    if (loading || decoded === frames.length) return;
+    loading = true;
+    loadButton.disabled = true;
+    loadButton.textContent = 'Loading layers ' + decoded + '/' + frames.length;
+    try {
+      while (decoded < frames.length) {
+        const frame = frames[decoded];
+        const source = frame.style.getPropertyValue('--layer-image').trim();
+        const image = new Image();
+        image.alt = '';
+        image.decoding = 'async';
+        image.src = source.slice(4, -1).replace(/^["']|["']$/g, '');
+        await image.decode();
+        const picture = frame.querySelector('.sequence-picture');
+        picture.replaceChildren(image);
+        picture.style.backgroundImage = 'none';
+        decoded++;
+        loadButton.textContent = 'Loading layers ' + decoded + '/' + frames.length;
+      }
+      frames[0].removeAttribute('data-active');
+      card.removeAttribute('data-selected');
+      card.removeAttribute('data-loading');
+      loadButton.hidden = true;
+      announcement.textContent = 'All layers are ready.';
+    } catch {
+      loadButton.textContent = 'Retry loading layers';
+      loadButton.disabled = false;
+      announcement.textContent = 'A layer could not be loaded. Select Retry loading layers to continue.';
+    } finally {
+      loading = false;
+    }
   }
+  loadButton.addEventListener('click', prepareLayers);
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(function (entries) {
-      if (entries.some(function (entry) { return entry.isIntersecting; })) {
+      if (entries.some(entry => entry.isIntersecting)) {
         observer.disconnect();
-        preloadNextLayer();
+        prepareLayers();
       }
-    });
+    }, { rootMargin: '900px 0px' });
     observer.observe(card);
+  } else {
+    prepareLayers();
   }
 
   function trackPoint(event) {
@@ -1821,6 +1866,7 @@
     const link = event.target.closest('.sequence-buttons a');
     if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    if (decoded !== frames.length) return;
     const old = currentFrame();
     const frame = document.getElementById(link.hash.slice(1)).nextElementSibling;
     const moveFocus = old.contains(document.activeElement);
@@ -1835,14 +1881,13 @@
       const next = frame.querySelector('.' + link.className) || frame.querySelector('.sequence-buttons a');
       next.focus({ preventScroll: true });
     }
-    preloadNextLayer();
   });
   window.addEventListener('hashchange', function () {
+    if (decoded !== frames.length) return;
     card.removeAttribute('data-selected');
     const active = card.querySelector('[data-active]');
     if (active) active.removeAttribute('data-active');
     lens.open = false;
-    preloadNextLayer();
   });
 })();
 </script>
