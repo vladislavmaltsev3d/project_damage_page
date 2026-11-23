@@ -658,6 +658,7 @@
     .product-specs ul { padding-left: 1.2em; }
     .product-specs li + li { margin-top: 6px; }
     @media (max-width: 720px) { .product-specs { grid-template-columns: 1fr; gap: 18px; } }
+    .sale-banner { display: block; width: 100%; height: auto; }
   </style>
 </head>
 <body>
@@ -682,9 +683,11 @@
   </section>
 
   <div class="spec-strip" aria-label="Product highlights">
-    <div class="spec"><strong>575</strong><span>Presets included</span></div>
+    <div class="spec"><strong>1,512</strong><span>Extended library presets</span></div>
     <div class="spec"><strong>71</strong><span>Assets included</span></div>
   </div>
+
+  <img class="sale-banner" src="https://raw.githubusercontent.com/vladislavmaltsev3d/project_damage_page/main/sale90badge.jpg" width="2000" height="400" decoding="async" alt="Project Damage sale">
 
   <section class="section wrap break-it" id="break-it" aria-labelledby="break-it-title">
     <h2 id="break-it-title">Break It!</h2>
@@ -1260,7 +1263,7 @@
 
   <section class="preset-section wrap" aria-labelledby="presets-title">
     <div class="preset-layout">
-      <div class="preset-total"><div class="big-count">572</div><p class="preset-label">Presets in Vol. 1</p></div>
+      <div class="preset-total"><div class="big-count">1,512</div><p class="preset-label">Presets in the extended library</p></div>
       <div class="preset-preview">
         <input id="pause-presets" type="checkbox" aria-label="Pause preset slideshow">
         <label for="pause-presets" title="Pause or resume slideshow" aria-hidden="true"></label>
@@ -1455,7 +1458,7 @@
     <div class="product-specs wrap">
       <section>
         <h3>What’s included</h3>
-        <p>Project Damage 1.0 includes <strong>64 effects and generators</strong>. The asset browser offers <strong>71 choices</strong> when the eight Boolean Break variants are counted separately. The 572 looks in Presets Vol. 1 are starting settings for these tools.</p>
+        <p>Project Damage 1.0 includes <strong>64 effects and generators</strong>. The asset browser offers <strong>71 choices</strong> when the eight Boolean Break variants are counted separately. The 1,512 presets in the extended library are starting settings for these tools.</p>
       </section>
       <section>
         <h3>Grease Pencil</h3>
@@ -1545,10 +1548,12 @@
       <p>You may encounter unexpected behavior. I’d love to hear your feedback.</p>
     </div>
     <dl class="experimental-files">
-      <dt>Windows standard</dt><dd><code>Project_Damage_1.0.0_Windows_x64.zip</code></dd>
-      <dt>macOS standard</dt><dd><code>Project_Damage_1.0.0_macOS.zip</code></dd>
-      <dt>Windows experimental</dt><dd><code>Experimental_Project_Damage_1.0.1_Windows_x64.zip</code></dd>
-      <dt>Read before trying</dt><dd><code>Experimental_Project_Damage_1.0.1_README.txt</code></dd>
+      <dt>Windows standard</dt><dd><code>Project_Damage_1.0.1_Windows_x64.zip</code></dd>
+      <dt>macOS standard</dt><dd><code>Project_Damage_1.0.1_macOS_arm64.zip</code></dd>
+      <dt>Windows experimental</dt><dd><code>Experimental_Project_Damage_1.0.2_Windows_x64.zip</code></dd>
+      <dt>Materials</dt><dd><code>CC0 Materials For Project Damage.zip</code></dd>
+      <dt>Built-in presets · Vol. 1</dt><dd><code>Built-In Presets Vol 1 _ Project Damage.zip</code></dd>
+      <dt>Extended preset library</dt><dd><code>Extended Built-in Presets.zip</code></dd>
     </dl>
   </section>
 
@@ -1572,6 +1577,22 @@
   </section>
 
   <section class="closing wrap" id="support" aria-labelledby="support-title"><div><h2 id="support-title">Give your scene<br>some history.</h2><p>Questions about Project Damage, setup or a particular effect? Get in touch with Lazy3D.</p></div><a class="contact-link" href="https://superhivemarket.com/creators/lazy3d" target="_blank" rel="noopener noreferrer">Contact on SuperHive <span class="arrow" aria-hidden="true">↗</span></a></section>
+  <details class="all-effects product-details" id="change-logs">
+    <summary><h2>Change logs info</h2></summary>
+    <div class="product-specs wrap">
+      <section>
+        <h3>1.0.2 · Experimental release version</h3>
+        <p>Added a new rebar creation method and support for vertex group assignment. Includes various fixes and small tweaks.</p>
+      </section>
+      <section>
+        <h3>1.0.1 · Release version</h3>
+      </section>
+      <section>
+        <h3>1.0.0 · Initial pre-release</h3>
+        <p><time datetime="2026-11-15">November 15, 2026</time></p>
+      </section>
+    </div>
+  </details>
   <footer class="footer wrap"><span class="footer-name">Project Damage / Lazy3D</span><span>Destruction, by design.<br>Tools for Blender artists.</span><a id="back-to-top" href="#top">Back to top ↑</a></footer>
 </main>
 <script>
