@@ -166,6 +166,19 @@
     .feedback-copy{max-width:66ch;margin-top:22px;font-size:16px;line-height:1.7}.feedback-copy p+p{margin-top:12px}
     .experimental{background:var(--orange);color:var(--ink)}.experimental-copy{max-width:66ch;margin-top:22px;font-size:16px;line-height:1.7}.experimental-copy p+p{margin-top:12px}
 
+    .section.watch-tutorials {
+      display: flex; align-items: center; gap: clamp(12px, 3vw, 32px);
+      padding-block: clamp(14px, 2.4vw, 25px);
+    }
+    .watch-tutorials h2 { min-width: 0; font-size: clamp(21px, 3.1vw, 34px); line-height: 1.08; }
+    .watch-tutorials-link {
+      display: inline-flex; align-items: center; justify-content: space-between; gap: 9px;
+      min-width: 0; min-height: 44px; padding: 8px 12px;
+      border: 1px solid var(--ink); color: var(--ink);
+      font-size: clamp(12px, 1.3vw, 14px); font-weight: 700; line-height: 1.2;
+    }
+    .watch-tutorials-link:hover, .watch-tutorials-link:focus-visible { background: var(--orange); }
+
     .section.experimental{
       display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);align-items:center;
       gap:12px clamp(20px,4vw,48px);padding-block:clamp(16px,2.2vw,26px)
@@ -1582,6 +1595,13 @@
     </div>
     <p class="limitations-note"><strong>I've put a lot of work into making Project Damage comfortable to use, even within these performance limits.</strong> Manual updates, background calculation and draft previews help you stay in control while building detailed results.</p>
     <p class="documentation-note">Visit the documentation tab for full information, requirements and limitations.</p>
+  </section>
+
+  <section class="section wrap watch-tutorials" id="watch-tutorials" aria-labelledby="watch-tutorials-title">
+    <h2 id="watch-tutorials-title">Watch it in action.</h2>
+    <a class="watch-tutorials-link" href="https://www.youtube.com/watch?v=ROpH7865OhY&amp;list=PLbD5I1cRdfaU" target="_blank" rel="noopener noreferrer">
+      Watch YouTube tutorials playlist <span class="arrow" aria-hidden="true">↗</span>
+    </a>
   </section>
 
   <section class="section wrap experimental" id="experimental" aria-labelledby="experimental-title">
