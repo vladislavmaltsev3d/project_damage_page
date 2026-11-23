@@ -1209,15 +1209,23 @@
       <h2 id="physics-title">Quick Physics</h2>
         <p>Fracture a mesh and simulate how the pieces fall.</p>
         <button type="button" class="physics-support-button" popovertarget="pd-physics-support" aria-haspopup="dialog">
-          Physics Support List <span aria-hidden="true">+</span>
+          Important Information and the Physics Support List <span aria-hidden="true">+</span>
         </button>
     </header>
     <div class="physics-support-panel" id="pd-physics-support" popover="auto" role="dialog" aria-labelledby="pd-physics-support-title">
       <div class="physics-support-head">
-        <h3 id="pd-physics-support-title">Physics Support List</h3>
+        <h3 id="pd-physics-support-title">Important Information and the Physics Support List</h3>
         <button type="button" popovertarget="pd-physics-support" popovertargetaction="hide" aria-label="Close physics support list" autofocus>×</button>
       </div>
       <div class="physics-support-content">
+        <section>
+          <h4>Physics is experimental</h4>
+          <p>The core of Project Damage is its library of 71 static damage effects and variants. Physics adds a way to set the broken pieces in motion. It works on most meshes, though results depend on the individual mesh. On especially complex models, inspect the fill and test the fracture before baking.</p>
+        </section>
+        <section>
+          <h4>Current pricing and future updates</h4>
+          <p>The current price covers the static toolkit. You can try the experimental physics tools at no extra cost while development continues. Future updates will focus on reliability. Once physics is stable, we plan to raise the price for new purchases by about 50%.</p>
+        </section>
         <section>
           <h4>Fill Damage &amp; Fill V2</h4>
           <p>Restore a cut with either tool, then use <strong>Fracture Fills</strong> to create rigid-body pieces.</p>
@@ -1460,6 +1468,16 @@
       <section>
         <h3>What’s included</h3>
         <p>Project Damage 1.0 includes <strong>64 effects and generators</strong>. The asset browser offers <strong>71 choices</strong> when the eight Boolean Break variants are counted separately. The 1,512 presets in the extended library are starting settings for these tools.</p>
+      </section>
+      <section>
+        <h3>Source mesh requirements</h3>
+        <p>Check the object’s dimensions and scene units first. Most damage sizes are set in centimetres. Select the mesh in Object Mode and run <strong>Add Project Damage</strong>. It applies rotation and scale while preserving the mesh’s world-space shape.</p>
+        <ul>
+          <li><strong>Walls and solid props.</strong> Use a closed, manifold mesh with outward-facing normals and enough thickness for the intended cut or reinforcement. Remove loose geometry and overlapping faces, and merge accidental duplicate vertices.</li>
+          <li><strong>Planes and open scans.</strong> Use <strong>Thin Shell</strong> for temporary backing, or <strong>Add Thickness</strong> to give a plane depth. If a wall already has front and back faces, <strong>Make Closed</strong> can bridge matching boundary loops.</li>
+          <li><strong>Cloth.</strong> Use <strong>Fabric Tears → Flat</strong> for a single sheet. For a garment with thickness, use <strong>Solidify</strong> and keep the Panel Thickness Limit smaller than the gap to the next layer.</li>
+          <li><strong>Curved or sculpted meshes.</strong> Choose <strong>Organic Models</strong> where available. Keep damage patches and generated parts smaller than the local bend radius. Tight folds can cause neighbouring pieces to overlap.</li>
+        </ul>
       </section>
       <section>
         <h3>Grease Pencil</h3>
